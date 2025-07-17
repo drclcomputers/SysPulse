@@ -1,32 +1,32 @@
 {
 	"background": "black",
-	"foreground": "cyan",
-	"altforeground": "magenta",
+	"foreground": "white",
+	"altforeground": "grey",
 	"cpu": {
-		"bar_low": "cyan",
-		"bar_high": "magenta"
+		"bar_low": "green",
+		"bar_high": "red"
 	},
 	"memory": {
-		"vmem_gauge": "cyan",
-		"smem_gauge": "magenta"
+		"vmem_gauge": "blue",
+		"smem_gauge": "cyan"
 	},
 	"network": {
-		"bar_low": "cyan",
-		"bar_high": "magenta"
+		"bar_low": "yellow",
+		"bar_high": "purple"
 	},
 	"disk": {
-		"bar_low": "cyan",
+		"bar_low": "blue",
 		"bar_medium": "yellow",
-		"bar_high": "magenta",
-		"bar_empty": "gray"
+		"bar_high": "red",
+		"bar_empty": "white"
 	},
 	"gpu": {
-		"bar_low": "cyan",
-		"bar_high": "magenta"
+		"bar_low": "green",
+		"bar_high": "red"
 	},
 	"layout": {
 		"rows": 4,
-		"columns": 4,
+		"columns": 2,
 		"spacing": 0,
 		"cpu": {
 			"enabled": true,
@@ -36,8 +36,8 @@
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "cyan",
-			"foreground_color": "cyan"
+			"border_color": "blue",
+			"foreground_color": "white"
 		},
 		"memory": {
 			"enabled": true,
@@ -47,8 +47,8 @@
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "magenta",
-			"foreground_color": "magenta"
+			"border_color": "green",
+			"foreground_color": "white"
 		},
 		"disk": {
 			"enabled": true,
@@ -59,9 +59,31 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "yellow",
-			"foreground_color": "yellow"
+			"foreground_color": "white"
 		},
 		"network": {
+			"enabled": true,
+			"row": 3,
+			"column": 0,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "cyan",
+			"foreground_color": "white"
+		},
+		"process": {
+			"enabled": true,
+			"row": 2,
+			"column": 1,
+			"rowSpan": 2,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "olive",
+			"foreground_color": "white"
+		},
+		"gpu": {
 			"enabled": true,
 			"row": 2,
 			"column": 0,
@@ -69,96 +91,74 @@
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "cyan",
-			"foreground_color": "cyan"
-		},
-		"gpu": {
-			"enabled": true,
-			"row": 2,
-			"column": 1,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
 			"border_color": "magenta",
-			"foreground_color": "magenta"
+			"foreground_color": "white"
 		},
 		"load": {
-			"enabled": true,
+			"enabled": false,
 			"row": 0,
 			"column": 2,
 			"rowSpan": 1,
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "cyan",
-			"foreground_color": "cyan"
+			"border_color": "red",
+			"foreground_color": "white"
 		},
 		"temperature": {
-			"enabled": true,
+			"enabled": false,
 			"row": 1,
 			"column": 2,
 			"rowSpan": 1,
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "yellow",
-			"foreground_color": "yellow"
+			"border_color": "orange",
+			"foreground_color": "white"
 		},
 		"network_connections": {
-			"enabled": true,
+			"enabled": false,
 			"row": 2,
 			"column": 2,
 			"rowSpan": 1,
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "magenta",
-			"foreground_color": "magenta"
+			"border_color": "purple",
+			"foreground_color": "white"
 		},
 		"disk_io": {
-			"enabled": true,
+			"enabled": false,
 			"row": 3,
 			"column": 0,
 			"rowSpan": 1,
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "cyan",
-			"foreground_color": "cyan"
+			"border_color": "lime",
+			"foreground_color": "black"
 		},
 		"process_tree": {
-			"enabled": true,
+			"enabled": false,
 			"row": 3,
 			"column": 1,
 			"rowSpan": 1,
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "yellow",
-			"foreground_color": "yellow"
+			"border_color": "teal",
+			"foreground_color": "white"
 		},
 		"battery": {
-			"enabled": true,
+			"enabled": false,
 			"row": 3,
 			"column": 2,
 			"rowSpan": 1,
 			"colSpan": 1,
 			"minWidth": 30,
 			"weight": 1.0,
-			"border_color": "magenta",
-			"foreground_color": "magenta"
-		},
-		"process": {
-			"enabled": true,
-			"row": 0,
-			"column": 3,
-			"rowSpan": 4,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "cyan",
-			"foreground_color": "cyan"
+			"border_color": "pink",
+			"foreground_color": "white"
 		}
 	},
 	"processsort": "cpu",
