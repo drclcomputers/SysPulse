@@ -69,7 +69,7 @@ func GetWindowsGPUInfo() ([]GPUInfo, error) {
 				} else if strings.Contains(strings.ToLower(gpu.Name), "rtx") {
 					memoryBytes = 8 * 1024 * 1024 * 1024
 				} else {
-					memoryBytes = 2 * 1024 * 1024 * 1024
+					memoryBytes = 4 * 1024 * 1024 * 1024
 				}
 			}
 

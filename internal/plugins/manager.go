@@ -38,13 +38,14 @@ func (pm *PluginManager) LoadPlugin(plugin Plugin) error {
 		Enabled:  true,
 		Settings: make(map[string]interface{}),
 		Layout: WidgetConfig{
-			Title:    name,
-			Row:      0,
-			Column:   0,
-			RowSpan:  1,
-			ColSpan:  1,
-			MinWidth: 20,
-			Enabled:  true,
+			Title:          name,
+			Row:            0,
+			Column:         0,
+			RowSpan:        1,
+			ColSpan:        1,
+			MinWidth:       20,
+			Enabled:        false,
+			UpdateInterval: 5,
 		},
 	}
 
@@ -136,20 +137,6 @@ func (pm *PluginManager) CreateWidgets() map[string]tview.Primitive {
 	}
 
 	return widgets
-}
-
-func (pm *PluginManager) UpdatePlugins() {
-	pm.mutex.RLock()
-	defer pm.mutex.RUnlock()
-
-	for name, plugin := range pm.plugins {
-		config := pm.configs[name]
-		if config.Enabled {
-			if widget, exists := pm.widgets[name]; exists {
-				go plugin.UpdateWidget(widget)
-			}
-		}
-	}
 }
 
 func (pm *PluginManager) EnablePlugin(name string) error {

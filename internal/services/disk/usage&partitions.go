@@ -85,3 +85,56 @@ func GetNumberofPartitions() string {
 
 	return fmt.Sprint(len(partitions), " Partitions")
 }
+
+func GetDiskFormattedInfo() string {
+	partitions, err := disk.Partitions(false)
+	if err != nil {
+		return fmt.Sprintf("Disk: Error - %v", err)
+	}
+
+	info := "Disk Usage Information\n\n"
+
+	totalUsed := uint64(0)
+	totalSize := uint64(0)
+
+	for i, partition := range partitions {
+		usage, err := disk.Usage(partition.Mountpoint)
+		if err != nil {
+			continue
+		}
+
+		info += fmt.Sprintf("=== Partition %d ===\n", i+1)
+		info += fmt.Sprintf("Device: %s\n", partition.Device)
+		info += fmt.Sprintf("Mountpoint: %s\n", partition.Mountpoint)
+		info += fmt.Sprintf("Filesystem: %s\n", partition.Fstype)
+		info += fmt.Sprintf("Used/Total: %.2f/%.2f GB (%.1f%%)\n", float64(usage.Used)/1024/1024/1024, float64(usage.Total)/1024/1024/1024, usage.UsedPercent)
+		info += fmt.Sprintf("Free: %.2f GB\n", float64(usage.Free)/1024/1024/1024)
+		//info += fmt.Sprintf("Inodes Total: %d\n", usage.InodesTotal)
+		//info += fmt.Sprintf("Inodes Used: %d (%.1f%%)\n", usage.InodesUsed, usage.InodesUsedPercent)
+		//info += fmt.Sprintf("Inodes Free: %d\n", usage.InodesFree)
+
+		if usage.UsedPercent < 70 {
+			info += "Status: Good - plenty of space available\n"
+		} else if usage.UsedPercent < 85 {
+			info += "Status: Moderate - consider cleaning up files\n"
+		} else if usage.UsedPercent < 95 {
+			info += "Status: Warning - running low on space\n"
+		} else {
+			info += "Status: Critical - almost full!\n"
+		}
+
+		totalUsed += usage.Used
+		totalSize += usage.Total
+		info += "\n"
+	}
+
+	if totalSize > 0 {
+		overallPercent := (float64(totalUsed) / float64(totalSize)) * 100
+		info += "=== Overall System ===\n"
+		info += fmt.Sprintf("Used/Total Storage: %.2f/%.2f GB (%.1f%%)\n", float64(totalUsed)/1024/1024/1024, float64(totalSize)/1024/1024/1024, overallPercent)
+		info += fmt.Sprintf("Free Storage: %.2f GB\n", float64(totalSize-totalUsed)/1024/1024/1024)
+		info += "\n"
+	}
+
+	return info
+}

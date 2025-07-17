@@ -50,6 +50,7 @@ type WidgetConfig struct {
 	Weight          float64 `json:"weight"`
 	BorderColor     string  `json:"border_color"`
 	ForegroundColor string  `json:"foreground_color"`
+	UpdateInterval  int     `json:"update_interval"` // Update interval in seconds
 }
 
 type Widget struct {

@@ -25,13 +25,68 @@ func GetCpuFormattedInfo() string {
 		return "Unknown CPU"
 	}
 
+	// Get current CPU usage
+	percents, err := cpu.Percent(0, true)
+	if err != nil {
+		percents = []float64{}
+	}
+
+	var totalUsage float64
+	if len(percents) > 0 {
+		var sum float64
+		for _, p := range percents {
+			sum += p
+		}
+		totalUsage = sum / float64(len(percents))
+	}
+
 	var output string
 
-	for _, cpu := range info {
-		output += fmt.Sprintf("=== CPU %d ===\nVendor: %s\nFamily: %s\nModel: %s\nStepping: %d\nCores: %d\nModel Name: %s\nFrequency: %.0f Mhz\nCache: %d", cpu.CPU, cpu.VendorID, cpu.Family, cpu.Model, cpu.Stepping, cpu.Cores, cpu.ModelName, cpu.Mhz, cpu.CacheSize)
+	output += "=== CPU Information ===\n"
+	for i, cpu := range info {
+		if len(info) > 1 {
+			output += fmt.Sprintf("\n--- CPU %d ---\n", i)
+		}
+		output += fmt.Sprintf("Vendor: %s\n", cpu.VendorID)
+		output += fmt.Sprintf("Model: %s\n", cpu.ModelName)
+		output += fmt.Sprintf("Family: %s\n", cpu.Family)
+		output += fmt.Sprintf("Model ID: %s\n", cpu.Model)
+		output += fmt.Sprintf("Stepping: %d\n", cpu.Stepping)
+		output += fmt.Sprintf("Cores: %d\n", cpu.Cores)
+		output += fmt.Sprintf("Base Frequency: %.0f MHz\n", cpu.Mhz)
+		output += fmt.Sprintf("Cache Size: %d KB\n", cpu.CacheSize)
+		output += fmt.Sprintf("CPU Index: %d\n", cpu.CPU)
+
+		if len(cpu.Flags) > 0 {
+			output += fmt.Sprintf("Features: %s\n", strings.Join(cpu.Flags[:min(10, len(cpu.Flags))], ", "))
+			if len(cpu.Flags) > 10 {
+				output += fmt.Sprintf("... and %d more features\n", len(cpu.Flags)-10)
+			}
+		}
+	}
+
+	output += "\n=== Current CPU Usage ===\n"
+	output += fmt.Sprintf("Average CPU Usage: %.1f%%\n", totalUsage)
+
+	output += "\n=== CPU Health Status ===\n"
+	if totalUsage < 30 {
+		output += "• CPU Load: Low - system is running smoothly\n"
+	} else if totalUsage < 60 {
+		output += "• CPU Load: Moderate - normal usage levels\n"
+	} else if totalUsage < 80 {
+		output += "• CPU Load: High - system is working hard\n"
+	} else {
+		output += "• CPU Load: Very High - system may be under stress\n"
 	}
 
 	return output
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func UpdateCPU(d *utils.Dashboard) {

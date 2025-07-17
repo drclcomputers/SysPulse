@@ -22,8 +22,6 @@ type Plugin interface {
 
 	CollectData() (map[string]interface{}, error)
 	ExportData() map[string]interface{}
-
-	UpdateInterval() time.Duration
 }
 
 type PluginConfig struct {
@@ -43,6 +41,7 @@ type WidgetConfig struct {
 	Enabled         bool   `json:"enabled"`
 	BorderColor     string `json:"border_color"`
 	ForegroundColor string `json:"foreground_color"`
+	UpdateInterval  int    `json:"update_interval"`
 }
 
 type PluginInfo struct {

@@ -105,9 +105,20 @@ func (d *Dashboard) initMemoryWidget() {
 			SetTitle(fmt.Sprint("Memory Usage | ", memory.GetRAM())).
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
-				if key == 'q' || key == 'Q' {
+				switch key {
+				case 'q', 'Q':
 					d.quitModal()
 					return nil
+				case 'i', 'I', rune(tcell.KeyEnter):
+					memorymodal := tview.NewModal().
+						SetText(memory.GetMemoryFormattedInfo()).
+						AddButtons([]string{"Ok"}).
+						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+							if buttonLabel == "Ok" {
+								d.App.SetRoot(d.MainWidget, true).SetFocus(d.MemWidget)
+							}
+						})
+					d.App.SetRoot(memorymodal, false).SetFocus(memorymodal)
 				}
 				return nil
 			})
@@ -128,9 +139,20 @@ func (d *Dashboard) initDiskWidget() {
 			SetTitle(fmt.Sprint("Disk Usage | ", disk.GetNumberofPartitions())).
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
-				if key == 'q' || key == 'Q' {
+				switch key {
+				case 'q', 'Q':
 					d.quitModal()
 					return nil
+				case 'i', 'I', rune(tcell.KeyEnter):
+					diskmodal := tview.NewModal().
+						SetText(disk.GetDiskFormattedInfo()).
+						AddButtons([]string{"Ok"}).
+						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+							if buttonLabel == "Ok" {
+								d.App.SetRoot(d.MainWidget, true).SetFocus(d.DiskWidget)
+							}
+						})
+					d.App.SetRoot(diskmodal, false).SetFocus(diskmodal)
 				}
 				return nil
 			})
@@ -151,9 +173,20 @@ func (d *Dashboard) initNetworkWidget() {
 			SetTitle("Network Activity / Interfaces").
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
-				if key == 'q' || key == 'Q' {
+				switch key {
+				case 'q', 'Q':
 					d.quitModal()
 					return nil
+				case 'i', 'I', rune(tcell.KeyEnter):
+					networkmodal := tview.NewModal().
+						SetText(network.GetNetworkFormattedInfo()).
+						AddButtons([]string{"Ok"}).
+						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+							if buttonLabel == "Ok" {
+								d.App.SetRoot(d.MainWidget, true).SetFocus(d.NetWidget)
+							}
+						})
+					d.App.SetRoot(networkmodal, false).SetFocus(networkmodal)
 				}
 				return nil
 			})

@@ -37,7 +37,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "blue",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 1
 		},
 		"memory": {
 			"enabled": true,
@@ -48,7 +49,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "green",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 2
 		},
 		"disk": {
 			"enabled": true,
@@ -59,7 +61,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "yellow",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 10
 		},
 		"network": {
 			"enabled": true,
@@ -70,7 +73,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "cyan",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 2
 		},
 		"process": {
 			"enabled": true,
@@ -81,7 +85,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "olive",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 3
 		},
 		"gpu": {
 			"enabled": true,
@@ -92,7 +97,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "magenta",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 10
 		},
 		"load": {
 			"enabled": false,
@@ -103,7 +109,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "red",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 5
 		},
 		"temperature": {
 			"enabled": false,
@@ -114,7 +121,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "orange",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 5
 		},
 		"network_connections": {
 			"enabled": false,
@@ -125,7 +133,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "purple",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 5
 		},
 		"disk_io": {
 			"enabled": false,
@@ -136,7 +145,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "lime",
-			"foreground_color": "black"
+			"foreground_color": "black",
+			"update_interval": 3
 		},
 		"process_tree": {
 			"enabled": false,
@@ -147,7 +157,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "teal",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 5
 		},
 		"battery": {
 			"enabled": false,
@@ -158,7 +169,8 @@
 			"minWidth": 30,
 			"weight": 1.0,
 			"border_color": "pink",
-			"foreground_color": "white"
+			"foreground_color": "white",
+			"update_interval": 10
 		}
 	},
 	"processsort": "cpu",

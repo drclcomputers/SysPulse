@@ -1,173 +1,188 @@
 {
-	"background": "black",
-	"foreground": "red",
 	"altforeground": "orange",
+	"background": "black",
 	"cpu": {
-		"bar_low": "orange",
-		"bar_high": "red"
-	},
-	"memory": {
-		"vmem_gauge": "red",
-		"smem_gauge": "orange"
-	},
-	"network": {
-		"bar_low": "orange",
-		"bar_high": "red"
+		"bar_high": "red",
+		"bar_low": "orange"
 	},
 	"disk": {
-		"bar_low": "orange",
-		"bar_medium": "red",
+		"bar_empty": "gray",
 		"bar_high": "red",
-		"bar_empty": "gray"
-	},
-	"gpu": {
 		"bar_low": "orange",
-		"bar_high": "red"
+		"bar_medium": "red"
+	},
+	"export": {
+		"directory": "exports",
+		"enabled": true,
+		"filename_prefix": "syspulse",
+		"formats": [
+			"csv",
+			"json"
+		],
+		"interval": 300
+	},
+	"foreground": "red",
+	"gpu": {
+		"bar_high": "red",
+		"bar_low": "orange"
 	},
 	"layout": {
-		"rows": 3,
-		"columns": 3,
-		"spacing": 0,
-		"cpu": {
-			"enabled": true,
-			"row": 0,
-			"column": 0,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
+		"battery": {
 			"border_color": "red",
-			"foreground_color": "red"
-		},
-		"memory": {
-			"enabled": true,
-			"row": 0,
-			"column": 1,
-			"rowSpan": 1,
 			"colSpan": 1,
+			"column": 2,
+			"enabled": false,
+			"foreground_color": "red",
 			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "orange",
-			"foreground_color": "orange"
+			"row": 3,
+			"rowSpan": 1,
+			"update_interval": 10,
+			"weight": 1
+		},
+		"columns": 3,
+		"cpu": {
+			"border_color": "red",
+			"colSpan": 1,
+			"column": 0,
+			"enabled": true,
+			"foreground_color": "red",
+			"minWidth": 30,
+			"row": 0,
+			"rowSpan": 1,
+			"update_interval": 1,
+			"weight": 1
 		},
 		"disk": {
-			"enabled": true,
-			"row": 1,
+			"border_color": "red",
+			"colSpan": 1,
 			"column": 0,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "red",
-			"foreground_color": "red"
-		},
-		"network": {
 			"enabled": true,
+			"foreground_color": "red",
+			"minWidth": 30,
 			"row": 1,
-			"column": 1,
 			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "orange",
-			"foreground_color": "orange"
-		},
-		"gpu": {
-			"enabled": true,
-			"row": 2,
-			"column": 0,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "red",
-			"foreground_color": "red"
-		},
-		"load": {
-			"enabled": true,
-			"row": 2,
-			"column": 1,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "orange",
-			"foreground_color": "orange"
-		},
-		"temperature": {
-			"enabled": false,
-			"row": 1,
-			"column": 2,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "red",
-			"foreground_color": "red"
-		},
-		"network_connections": {
-			"enabled": false,
-			"row": 2,
-			"column": 2,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "orange",
-			"foreground_color": "orange"
+			"update_interval": 3,
+			"weight": 1
 		},
 		"disk_io": {
-			"enabled": false,
-			"row": 3,
+			"border_color": "red",
+			"colSpan": 1,
 			"column": 0,
-			"rowSpan": 1,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "red",
-			"foreground_color": "red"
-		},
-		"process_tree": {
 			"enabled": false,
-			"row": 3,
-			"column": 1,
-			"rowSpan": 1,
-			"colSpan": 1,
+			"foreground_color": "red",
 			"minWidth": 30,
-			"weight": 1.0,
+			"row": 3,
+			"rowSpan": 1,
+			"update_interval": 3,
+			"weight": 1
+		},
+		"gpu": {
+			"border_color": "red",
+			"colSpan": 1,
+			"column": 0,
+			"enabled": true,
+			"foreground_color": "red",
+			"minWidth": 30,
+			"row": 2,
+			"rowSpan": 1,
+			"update_interval": 3,
+			"weight": 1
+		},
+		"load": {
 			"border_color": "orange",
-			"foreground_color": "orange"
-		},
-		"battery": {
-			"enabled": false,
-			"row": 3,
-			"column": 2,
-			"rowSpan": 1,
 			"colSpan": 1,
+			"column": 1,
+			"enabled": true,
+			"foreground_color": "orange",
 			"minWidth": 30,
-			"weight": 1.0,
-			"border_color": "red",
-			"foreground_color": "red"
+			"row": 2,
+			"rowSpan": 1,
+			"update_interval": 5,
+			"weight": 1
+		},
+		"memory": {
+			"border_color": "orange",
+			"colSpan": 1,
+			"column": 1,
+			"enabled": true,
+			"foreground_color": "orange",
+			"minWidth": 30,
+			"row": 0,
+			"rowSpan": 1,
+			"update_interval": 2,
+			"weight": 1
+		},
+		"network": {
+			"border_color": "orange",
+			"colSpan": 1,
+			"column": 1,
+			"enabled": true,
+			"foreground_color": "orange",
+			"minWidth": 30,
+			"row": 1,
+			"rowSpan": 1,
+			"update_interval": 1,
+			"weight": 1
+		},
+		"network_connections": {
+			"border_color": "orange",
+			"colSpan": 1,
+			"column": 2,
+			"enabled": false,
+			"foreground_color": "orange",
+			"minWidth": 30,
+			"row": 2,
+			"rowSpan": 1,
+			"update_interval": 5,
+			"weight": 1
 		},
 		"process": {
-			"enabled": true,
-			"row": 0,
-			"column": 2,
-			"rowSpan": 3,
-			"colSpan": 1,
-			"minWidth": 30,
-			"weight": 1.0,
 			"border_color": "red",
-			"foreground_color": "red"
+			"colSpan": 1,
+			"column": 2,
+			"enabled": true,
+			"foreground_color": "red",
+			"minWidth": 30,
+			"row": 0,
+			"rowSpan": 3,
+			"update_interval": 2,
+			"weight": 1
+		},
+		"process_tree": {
+			"border_color": "orange",
+			"colSpan": 1,
+			"column": 1,
+			"enabled": false,
+			"foreground_color": "orange",
+			"minWidth": 30,
+			"row": 3,
+			"rowSpan": 1,
+			"update_interval": 5,
+			"weight": 1
+		},
+		"rows": 3,
+		"spacing": 0,
+		"temperature": {
+			"border_color": "red",
+			"colSpan": 1,
+			"column": 2,
+			"enabled": false,
+			"foreground_color": "red",
+			"minWidth": 30,
+			"row": 1,
+			"rowSpan": 1,
+			"update_interval": 5,
+			"weight": 1
 		}
 	},
+	"memory": {
+		"smem_gauge": "orange",
+		"vmem_gauge": "red"
+	},
+	"network": {
+		"bar_high": "red",
+		"bar_low": "orange"
+	},
 	"processsort": "cpu",
-	"updatetime": 1,
-	"export": {
-		"enabled": true,
-		"interval": 300,
-		"formats": ["csv", "json"],
-		"directory": "exports",
-		"filename_prefix": "syspulse"
-	}
+	"updatetime": 1
 }

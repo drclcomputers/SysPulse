@@ -88,3 +88,53 @@ func UpdateNetwork(d *utils.Dashboard) {
 		return x, y, w, h
 	})
 }
+
+func GetNetworkFormattedInfo() string {
+	stats, err := net.IOCounters(false)
+	if err != nil {
+		return fmt.Sprintf("Network: Error - %v", err)
+	}
+
+	info := "Network Activity Information\n\n"
+
+	if len(stats) > 0 {
+		netStat := stats[0]
+
+		info += "=== Overall Network Statistics ===\n"
+		info += fmt.Sprintf("Bytes Sent/Received: %.2f/%.2f GB\n", float64(netStat.BytesSent)/1024/1024/1024, float64(netStat.BytesRecv)/1024/1024/1024)
+		info += fmt.Sprintf("Packets Sent/Received: %d/%d\n", netStat.PacketsSent, netStat.PacketsRecv)
+		info += fmt.Sprintf("Send/Receive Errors: %d/%d\n", netStat.Errin, netStat.Errout)
+		info += fmt.Sprintf("Dropped Packets In/Out: %d/%d\n", netStat.Dropin, netStat.Dropout)
+		info += "\n"
+	}
+
+	info += fmt.Sprintf("Up/Down Speed: %s / %s\n", formatBytes(bytesSentPerSec), formatBytes(bytesRecvPerSec))
+	info += "\n"
+
+	info += "=== Network Interfaces ===\n"
+	interfaces := GetInterfaces()
+	for _, iface := range interfaces {
+		info += fmt.Sprintf("• %s\n", iface)
+	}
+
+	interfaceStats, err := net.IOCounters(true)
+	if err == nil && len(interfaceStats) > 0 {
+		info += "\n=== Per-Interface Statistics ===\n"
+		for _, iface := range interfaceStats {
+			if iface.BytesSent > 0 || iface.BytesRecv > 0 {
+				info += fmt.Sprintf("Interface: %s\n", iface.Name)
+				info += fmt.Sprintf("  Sent: %.2f MB (%d packets)\n", float64(iface.BytesSent)/1024/1024, iface.PacketsSent)
+				info += fmt.Sprintf("  Received: %.2f MB (%d packets)\n", float64(iface.BytesRecv)/1024/1024, iface.PacketsRecv)
+				if iface.Errin > 0 || iface.Errout > 0 {
+					info += fmt.Sprintf("  Errors: %d in, %d out\n", iface.Errin, iface.Errout)
+				}
+				if iface.Dropin > 0 || iface.Dropout > 0 {
+					info += fmt.Sprintf("  Drops: %d in, %d out\n", iface.Dropin, iface.Dropout)
+				}
+				info += "\n"
+			}
+		}
+	}
+
+	return info
+}

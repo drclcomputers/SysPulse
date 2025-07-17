@@ -17,7 +17,8 @@
         "minWidth": 25,
         "enabled": true,
         "border_color": "aqua",
-        "foreground_color": "white"
+        "foreground_color": "white",
+        "update_interval": 3
       }
     },
     "docker": {
@@ -39,13 +40,13 @@
         "minWidth": 30,
         "enabled": true,
         "border_color": "navy",
-        "foreground_color": "white"
+        "foreground_color": "white",
+        "update_interval": 10
       }
     }
   },
   "plugin_settings": {
     "auto_load": false,
-    "update_interval": 1,
     "enable_notifications": false,
     "plugin_directory": "./plugins"
   }

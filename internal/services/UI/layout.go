@@ -1,12 +1,15 @@
 package ui
 
 import (
+	"fmt"
+	"os"
 	"sort"
 	"syspulse/internal/plugins"
 	"syspulse/internal/utils"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
+	"golang.org/x/term"
 )
 
 type widgetPosition struct {
@@ -15,7 +18,65 @@ type widgetPosition struct {
 	column int
 }
 
+type TerminalSize struct {
+	Width  int
+	Height int
+}
+
+func GetTerminalSize() (int, int, error) {
+	if width, height, err := term.GetSize(int(os.Stdin.Fd())); err == nil {
+		return width, height, nil
+	}
+
+	if width, height, err := term.GetSize(int(os.Stdout.Fd())); err == nil {
+		return width, height, nil
+	}
+
+	if width, height, err := term.GetSize(int(os.Stderr.Fd())); err == nil {
+		return width, height, nil
+	}
+
+	return 80, 24, nil
+}
+
+func (d *Dashboard) CheckTerminalSize() {
+	width, height, err := GetTerminalSize()
+	if err != nil {
+		return
+	}
+
+	availableHeight := height - 3
+	minWidth := 80
+	minHeight := 24
+
+	if width < minWidth || availableHeight < minHeight {
+		d.ShowTerminalSizeWarning(width, height)
+	}
+}
+
+func (d *Dashboard) ShowTerminalSizeWarning(width, height int) {
+	warning := fmt.Sprintf("Terminal Size: %dx%d\n\nTerminal is too small for optimal display.\n\nFor best experience:\n• Increase terminal size to at least 80x24\n• Use fullscreen mode\n• Zoom out if needed\n\nContinue anyway or quit?", width, height)
+
+	modal := tview.NewModal().
+		SetText(warning).
+		AddButtons([]string{"Continue", "Quit"}).
+		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+			if buttonLabel == "Quit" {
+				d.App.Stop()
+			} else {
+				d.App.SetRoot(d.MainWidget, true)
+			}
+		})
+
+	d.App.SetRoot(modal, false).SetFocus(modal)
+}
+
 func (d *Dashboard) initMainLayout() {
+	d.rebuildLayoutGrid()
+	d.CheckTerminalSize()
+}
+
+func (d *Dashboard) rebuildLayoutGrid() {
 	grid := tview.NewGrid().
 		SetRows(make([]int, d.Theme.Layout.Rows)...).
 		SetColumns(make([]int, d.Theme.Layout.Columns)...).
@@ -307,7 +368,7 @@ func (d *Dashboard) createMainWidget(grid *tview.Grid) {
 		SetDirection(tview.FlexRow).
 		AddItem(d.HeaderWidget, 2, 1, false).
 		AddItem(grid, 0, 8, true).
-		AddItem(d.FooterWidget, 2, 1, false)
+		AddItem(d.FooterWidget, 1, 1, false)
 
 	d.MainWidget.SetBackgroundColor(utils.GetColorFromName(d.Theme.Background))
 

@@ -14,6 +14,7 @@ A powerful terminal-based system monitoring tool written in Go, featuring real-t
   - Performance metrics tracking and self-monitoring
   - Automatic data export (CSV/JSON) with scheduled exports
   - Advanced logging system with rotation and multiple severity levels
+  - **Comprehensive widget information modals** - Detailed system insights accessible with 'I'/'Enter' keys
 
 - **Plugin System**
   - **Extensible Architecture** - Add custom widgets and monitoring capabilities
@@ -104,15 +105,23 @@ go install github.com/yourusername/syspulse@latest
 - `G` - Focus GPU widget
 
 #### Process Management
-- `K` - Kill selected process (with confirmation) **!!! Note: Killing processes does not work on Windows**
+- `K` - Kill selected process (platform-specific methods with confirmation)
 - `F` - Search/filter processes
 - `Y` - Toggle process sorting (CPU/Memory)
 - `Up/Down` or `W/S` - Navigate process list
 - `I` - View detailed process information
 
+#### Process Kill Methods
+- **Windows**: Graceful termination → Taskkill → Windows API
+- **Linux/Unix**: SIGTERM → SIGKILL with signal handling
+- **Cross-platform**: Fallback to basic kill method
+
 #### System Information
 - `I` (on any widget) - Show detailed information for that component
-- `I` (on CPU widget) - Show CPU specifications and features
+- `I` (on CPU widget) - Show CPU specifications, current usage, and per-core statistics
+- `I` (on Memory widget) - Show RAM/Swap usage, health status, and optimization tips
+- `I` (on Disk widget) - Show per-partition information, usage statistics, and health advice
+- `I` (on Network widget) - Show interface details, transfer rates, and network statistics
 - `I` (on GPU widget) - Show GPU details and driver information
 
 ## ⚙️ Configuration
@@ -283,6 +292,15 @@ syspulse/
 ```
 
 ### Key Features in Detail
+
+#### Widget Information Modals
+- **Comprehensive system insights**: Each widget provides detailed information accessible with the 'I' key
+- **Memory modal**: Shows RAM/Swap usage, health status, and memory optimization tips
+- **Disk modal**: Displays per-partition information, usage statistics, and health recommendations
+- **Network modal**: Provides interface details, transfer rates, and network performance metrics
+- **CPU modal**: Hardware specifications, current usage, per-core breakdown, and thermal status
+- **Consistent interface**: Unified modal design across all widgets for familiar user experience
+- **Context-aware help**: Each modal provides specific tips and recommendations based on current system state
 
 #### Plugin System
 - **Extensible Architecture**: Add custom widgets and monitoring capabilities without modifying core code
@@ -757,18 +775,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Dynamic plugin loading from external files
 - [ ] Plugin configuration UI within the dashboard
 
+## Actively Known Bugs / Features to include
+
+### These are bugs / features that have been detected by SysPulse's developer or by the users. Currently, there is active development in fixing them / adding them.
+
+- [x] **Stricter plugin widgets verification** ✅
+- [x] **Platform-specific process killing** ✅
+- [x] **No GPU utilisation in Windows** ✅
+- [x] **When the terminal sizes are too small (even excesive zooming in could cause this), no widgets would be shown. -> Fix: make your terminal bigger by zooming out, making it fullscreen or make the min width in config.json smaller** ✅
+- [ ] Temperature monitoring rarely works, even in Linux
+
+If you find any bugs, open an ISSUE and I'll do my best in fixing them as quickly as possible.
+
+## Changelog
+
+- 11.9 alpha - Added custom update intervals for widgets + Bug Fixes
+- 11.7 alpha - Initial Release
+
 ---
 
 **Made with ❤️ by the drclcomputers**
 
 *For issues, feature requests, and plugin contributions, visit our [GitHub repository](https://github.com/drclcomputers/syspulse)*
-
-
-**Actively Known Bugs**
-
-### These are bugs that have been detected by SysPulse's developer or by the users. Currently, there is active development in fixing them.
-
-- [ ] No GPU utilisation in Windows
-- [ ] When the terminal sizes are too small (even excesive zooming in could cause this), no widgets would be shown. -> This has a potential fix: make your terminal bigger by zooming out or making it fullscreen
-- [ ] Temperature monitoring rarely works, even in Linux
-- [ ] Processes can't be killed using the current method (I'll have to introduce platform-specific ways)

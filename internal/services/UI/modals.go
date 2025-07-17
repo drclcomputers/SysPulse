@@ -8,28 +8,39 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
+	"github.com/shirou/gopsutil/process"
 )
 
 func (d *Dashboard) showHelpModal() {
-	helpText := `[yellow]Global Shortcuts:[white]
-• TAB/Shift+TAB - Cycle through widgets
-• Q - Quit application
-• H - Show this help screen
-• I - Show more information (only for some widgets)
-• Y - Change process sorting (CPU/Memory)
+	helpText := `Global Shortcuts:
+- TAB/Shift+TAB - Cycle through widgets
+- Q - Quit application
+- H - Show this help screen
+- I - Show more information
+- Y - Change process sorting (CPU/Memory)
 
-[yellow]Quick Navigation:[white]
-• C - Focus CPU widget
-• M - Focus Memory widget
-• D - Focus Disk widget
-• N - Focus Network widget
-• P - Focus Process widget
+Quick Navigation:
+- C - Focus CPU widget
+- M - Focus Memory widget
+- D - Focus Disk widget
+- N - Focus Network widget
+- P - Focus Process widget
+- G - Focus GPU widget
 
-[yellow]Process Management:[white]
-• K - Kill selected process
-• F - Search/filter processes
-• Up/Down or W/S - Navigate process list
-• I - View process details`
+Widget Information:
+- I or ENTER - Show detailed information modal for focused widget
+
+Process Management:
+- K - Kill selected process (platform-specific methods)
+- F - Search/filter processes
+- Up/Down or W/S - Navigate process list
+- I - View process details
+
+Process Kill Methods:
+- Kill - Graceful termination (recommended)
+- Force Kill - Immediate termination
+- Platform-specific optimizations for Windows/Linux
+`
 
 	modal := tview.NewModal().
 		SetText(helpText).
@@ -199,13 +210,57 @@ func (d *Dashboard) quitModal() {
 }
 
 func (d *Dashboard) showProcessKillModal(selectedPID int32) {
+	canKill, reason := processes.CanKillProcess(selectedPID)
+	if !canKill {
+		modal := tview.NewModal().
+			SetText(fmt.Sprintf("Cannot kill process PID %d: %s", selectedPID, reason)).
+			AddButtons([]string{"OK"}).
+			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+				d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
+			})
+		d.App.SetRoot(modal, false).SetFocus(modal)
+		return
+	}
+
+	proc, err := process.NewProcess(selectedPID)
+	var procName string
+	if err == nil {
+		procName, _ = proc.Name()
+	}
+
+	displayText := fmt.Sprintf("Kill process PID: %d", selectedPID)
+	if procName != "" {
+		displayText = fmt.Sprintf("Kill process: %s (PID: %d)", procName, selectedPID)
+	}
+
 	modal := tview.NewModal().
-		SetText(fmt.Sprintf("Are you sure you want to kill process PID: %d?", selectedPID)).
-		AddButtons([]string{"Yes", "No"}).
+		SetText(displayText).
+		AddButtons([]string{"Kill", "Force Kill", "Cancel"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-			if buttonLabel == "Yes" {
-				processes.KillProcByID(selectedPID)
+			switch buttonLabel {
+			case "Kill":
+				result := processes.KillProcByID(selectedPID)
+				if result != "" {
+					d.showKillResultModal(selectedPID, result)
+					return
+				}
+			case "Force Kill":
+				result := processes.ForceKillProcByID(selectedPID)
+				if result != "" {
+					d.showKillResultModal(selectedPID, result)
+					return
+				}
 			}
+			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
+		})
+	d.App.SetRoot(modal, false).SetFocus(modal)
+}
+
+func (d *Dashboard) showKillResultModal(pid int32, errorMsg string) {
+	modal := tview.NewModal().
+		SetText(fmt.Sprintf("Failed to kill process PID %d:\n%s", pid, errorMsg)).
+		AddButtons([]string{"OK"}).
+		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
 		})
 	d.App.SetRoot(modal, false).SetFocus(modal)
@@ -253,11 +308,11 @@ func (d *Dashboard) showProcessTreeModal() {
 	}
 
 	content += "\n[blue]Process Status Legend:[white]\n"
-	content += "• [green]Running:[white] Currently executing\n"
-	content += "• [blue]Sleeping:[white] Waiting for resources\n"
-	content += "• [yellow]Stopped:[white] Suspended process\n"
-	content += "• [red]Zombie:[white] Terminated but not cleaned up\n"
-	content += "• [cyan]Idle:[white] Waiting for work\n"
+	content += "- [green]Running:[white] Currently executing\n"
+	content += "- [blue]Sleeping:[white] Waiting for resources\n"
+	content += "- [yellow]Stopped:[white] Suspended process\n"
+	content += "- [red]Zombie:[white] Terminated but not cleaned up\n"
+	content += "- [cyan]Idle:[white] Waiting for work\n"
 
 	textView.SetText(content)
 

@@ -53,6 +53,13 @@ func LoadPluginConfig(configPath string) (*PluginSystemConfig, error) {
 		config.PluginSettings.PluginDirectory = "./plugins"
 	}
 
+	for pluginName, pluginConfig := range config.Plugins {
+		if pluginConfig.Layout.UpdateInterval == 0 {
+			pluginConfig.Layout.UpdateInterval = 5
+			config.Plugins[pluginName] = pluginConfig
+		}
+	}
+
 	return &config, nil
 }
 

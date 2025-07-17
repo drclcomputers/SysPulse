@@ -67,14 +67,42 @@ func InitializePluginSystem(dashboard *utils.Dashboard) error {
 }
 
 func StartPluginUpdateWorker(dashboard *utils.Dashboard) {
+	if dashboard.PluginManager == nil {
+		return
+	}
+
+	pluginManager, ok := dashboard.PluginManager.(*PluginManager)
+	if !ok {
+		return
+	}
+
+	pluginInfo := pluginManager.GetPluginInfo()
+	for _, info := range pluginInfo {
+		if info.Config.Enabled {
+			plugin, exists := pluginManager.GetPlugin(info.Name)
+			if exists {
+				startPluginWorker(dashboard, plugin, info.Config)
+			}
+		}
+	}
+}
+
+func startPluginWorker(dashboard *utils.Dashboard, plugin Plugin, config PluginConfig) {
+	interval := config.Layout.UpdateInterval
+	if interval <= 0 {
+		interval = 5
+	}
+
 	go func() {
-		ticker := time.NewTicker(2 * time.Second)
+		ticker := time.NewTicker(time.Duration(interval) * time.Second)
 		defer ticker.Stop()
 
 		for range ticker.C {
 			if dashboard.PluginManager != nil {
 				if pluginManager, ok := dashboard.PluginManager.(*PluginManager); ok {
-					pluginManager.UpdatePlugins()
+					if widget, exists := pluginManager.GetWidget(plugin.Name()); exists {
+						plugin.UpdateWidget(widget)
+					}
 				}
 			}
 		}

@@ -158,20 +158,6 @@ func UpdateProcesses(d *utils.Dashboard) {
 	}
 }
 
-func KillProcByID(pid int32) string {
-	proc, err := process.NewProcess(pid)
-	if err != nil {
-		return fmt.Sprintf("failed to find process: %v", err)
-	}
-
-	err = proc.Kill()
-	if err != nil {
-		return fmt.Sprintf("failed to kill process: %v", err)
-	}
-
-	return ""
-}
-
 func ShowProcessDetails(d *utils.Dashboard) {
 	currentItem := d.ProcessWidget.GetCurrentItem()
 	if currentItem < 0 || currentItem >= d.ProcessWidget.GetItemCount() {
