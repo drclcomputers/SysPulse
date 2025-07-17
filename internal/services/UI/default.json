@@ -1,0 +1,173 @@
+{
+	"background": "black",
+	"foreground": "white",
+	"altforeground": "grey",
+	"cpu": {
+		"bar_low": "green",
+		"bar_high": "red"
+	},
+	"memory": {
+		"vmem_gauge": "blue",
+		"smem_gauge": "cyan"
+	},
+	"network": {
+		"bar_low": "yellow",
+		"bar_high": "purple"
+	},
+	"disk": {
+		"bar_low": "blue",
+		"bar_medium": "yellow",
+		"bar_high": "red",
+		"bar_empty": "white"
+	},
+	"gpu": {
+		"bar_low": "green",
+		"bar_high": "red"
+	},
+	"layout": {
+		"rows": 4,
+		"columns": 2,
+		"spacing": 0,
+		"cpu": {
+			"enabled": true,
+			"row": 0,
+			"column": 0,
+			"rowSpan": 2,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "blue",
+			"foreground_color": "white"
+		},
+		"memory": {
+			"enabled": true,
+			"row": 0,
+			"column": 1,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "green",
+			"foreground_color": "white"
+		},
+		"disk": {
+			"enabled": true,
+			"row": 1,
+			"column": 1,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "yellow",
+			"foreground_color": "white"
+		},
+		"network": {
+			"enabled": true,
+			"row": 3,
+			"column": 0,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "cyan",
+			"foreground_color": "white"
+		},
+		"process": {
+			"enabled": true,
+			"row": 2,
+			"column": 1,
+			"rowSpan": 2,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "olive",
+			"foreground_color": "white"
+		},
+		"gpu": {
+			"enabled": true,
+			"row": 2,
+			"column": 0,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "magenta",
+			"foreground_color": "white"
+		},
+		"load": {
+			"enabled": false,
+			"row": 0,
+			"column": 2,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "red",
+			"foreground_color": "white"
+		},
+		"temperature": {
+			"enabled": false,
+			"row": 1,
+			"column": 2,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "orange",
+			"foreground_color": "white"
+		},
+		"network_connections": {
+			"enabled": false,
+			"row": 2,
+			"column": 2,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "purple",
+			"foreground_color": "white"
+		},
+		"disk_io": {
+			"enabled": false,
+			"row": 3,
+			"column": 0,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "lime",
+			"foreground_color": "black"
+		},
+		"process_tree": {
+			"enabled": false,
+			"row": 3,
+			"column": 1,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "teal",
+			"foreground_color": "white"
+		},
+		"battery": {
+			"enabled": false,
+			"row": 3,
+			"column": 2,
+			"rowSpan": 1,
+			"colSpan": 1,
+			"minWidth": 30,
+			"weight": 1.0,
+			"border_color": "pink",
+			"foreground_color": "white"
+		}
+	},
+	"processsort": "cpu",
+	"updatetime": 1,
+	"export": {
+		"enabled": true,
+		"interval": 300,
+		"formats": ["csv", "json"],
+		"directory": "exports",
+		"filename_prefix": "syspulse"
+	}
+}
