@@ -762,3 +762,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Made with ❤️ by the drclcomputers**
 
 *For issues, feature requests, and plugin contributions, visit our [GitHub repository](https://github.com/drclcomputers/syspulse)*
+
+
+**Actively Known Bugs**
+
+### These are bugs that have been detected by SysPulse's developer or by the users. Currently, there is active development in fixing them.
+
+- [ ] No GPU utilisation in Windows
+- [ ] When the terminal sizes are too small (even excesive zooming in could cause this), no widgets would be shown. -> This has a potential fix: make your terminal bigger by zooming out or making it fullscreen
+- [ ] Temperature monitoring rarely works, even in Linux
+- [ ] Processes can't be killed using the current method (I'll have to introduce platform-specific ways)
