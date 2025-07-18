@@ -295,6 +295,8 @@ This marks the first public release of SysPulse, a powerful terminal-based syste
 - **Memory management** with proper cleanup and garbage collection
 - **Efficient data structures** for high-frequency updates
 
+#### Bug Fixes
+
 ### 🎮 User Experience
 
 #### Keyboard Controls
@@ -328,7 +330,6 @@ syspulse/
 ```
 
 ### 📋 Known Limitations (Alpha)
-- Process killing functionality is not supported on Windows
 - GPU monitoring requires specific drivers for optimal functionality
 - Some advanced features may require administrator privileges
 - Plugin system is currently limited to built-in plugins
