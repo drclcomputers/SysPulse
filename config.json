@@ -53,7 +53,7 @@
 			"update_interval": 2
 		},
 		"disk": {
-			"enabled": false,
+			"enabled": true,
 			"row": 1,
 			"column": 1,
 			"rowSpan": 1,
@@ -113,9 +113,9 @@
 			"update_interval": 5
 		},
 		"temperature": {
-			"enabled": true,
+			"enabled": false,
 			"row": 1,
-			"column": 1,
+			"column": 2,
 			"rowSpan": 1,
 			"colSpan": 1,
 			"minWidth": 10,
