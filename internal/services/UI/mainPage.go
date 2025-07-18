@@ -39,6 +39,7 @@ func Run(d *utils.Dashboard) error {
 	startExportWorker(d, quit)
 
 	d.App.EnableMouse(true)
+	d.App.EnablePaste(true)
 
 	log.Info("Starting SysPulse application")
 	err := d.App.Run()

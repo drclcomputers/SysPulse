@@ -34,7 +34,7 @@ func UpdateVMem(d *utils.Dashboard) {
 			currentY := utils.SafePrintText(screen, vMemText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.Memory.ForegroundColor))
 
 			sMemText := fmt.Sprintf("Swap Memory  : %s%.1f/%.1fGB", utils.BarColor("█", SMembarCount, d.Theme.Memory.SMemGauge), SMemusedGB, SMemtotalGB)
-			utils.SafePrintText(screen, sMemText, x+2, currentY+1, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Memory.ForegroundColor))
+			utils.SafePrintText(screen, sMemText, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Memory.ForegroundColor))
 			return x, y, w, h
 		})
 	}

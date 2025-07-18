@@ -781,9 +781,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [x] **Stricter plugin widgets verification** ✅
 - [x] **Platform-specific process killing** ✅
-- [x] **No GPU utilisation in Windows** ✅
+- [x] **No GPU utilisation in Windows** !!! Probably. I don't know exactly. Getting GPU info without DX or other libraries is such a hassle !!!
 - [x] **When the terminal sizes are too small (even excesive zooming in could cause this), no widgets would be shown. -> Fix: make your terminal bigger by zooming out, making it fullscreen or make the min width in config.json smaller** ✅
-- [ ] Temperature monitoring rarely works, even in Linux
+- [x] **Temperature monitoring rarely works, even in Linux** - Still don't know exactly if it completely works. It's a hassle to get info about temperature in Windows.
 
 If you find any bugs, open an ISSUE and I'll do my best in fixing them as quickly as possible.
 
