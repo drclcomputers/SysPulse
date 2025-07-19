@@ -6,6 +6,7 @@ import (
 	"syspulse/internal/utils"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 	"github.com/shirou/gopsutil/disk"
 )
 
@@ -45,32 +46,41 @@ func UpdateDisk(d *utils.Dashboard) {
 		d.DiskWidget.SetDrawFunc(func(screen tcell.Screen, x, y, w, h int) (int, int, int, int) {
 			currentY := y + 1
 			for i, u := range d.DiskData {
-				used := float64(u.Used) / 1e9
-				total := float64(u.Total) / 1e9
-				//free := float64(u.Free) / 1e9
+				used := float64(u.Used) / 1024 / 1024 / 1024
+				total := float64(u.Total) / 1024 / 1024 / 1024
+				//free := float64(u.Free) / 1024 / 1024 / 1024
 				bar := getDiskBar(used, total, d.Theme.Disk)
 
 				if currentY >= y+h-1 {
 					break
 				}
 
-				line1 := fmt.Sprintf("%s - Filesystem: %s",
-					u.Path,
-					partitions[i].Fstype,
-				)
-				currentY = utils.SafePrintText(screen, line1, x+3, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.Disk.ForegroundColor))
+				fs := ""
+				if i < len(partitions) && partitions[i].Fstype != "" {
+					fs = partitions[i].Fstype
+				} else {
+					fs = "Unknown"
+				}
 
+				line1 := fmt.Sprintf("%s (%s) %s",
+					u.Path,
+					fs,
+					bar,
+				)
+				tview.Print(screen, line1, x+2, currentY, w-2, y+h-1, utils.GetColorFromName(d.Theme.Layout.Disk.ForegroundColor))
+
+				currentY++
 				if currentY >= y+h-1 {
 					break
 				}
 
-				line2 := fmt.Sprintf("  %s %.1f/%.1fGB",
-					bar,
+				line2 := fmt.Sprintf("%.1f/%.1fGB",
 					used,
 					total,
-					//free,
 				)
-				currentY = utils.SafePrintText(screen, line2, x+3, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.Disk.ForegroundColor))
+
+				tview.Print(screen, line2, x+3, currentY, w-2, y+h-1, utils.GetColorFromName(d.Theme.Layout.Disk.ForegroundColor))
+				currentY++
 			}
 			return x, y, w, h
 		})

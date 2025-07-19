@@ -12,12 +12,13 @@ import (
 )
 
 func (d *Dashboard) showHelpModal() {
+	d.InModalState = true
+
 	helpText := `Global Shortcuts:
 - TAB/Shift+TAB - Cycle through widgets
 - Q - Quit application
 - H - Show this help screen
-- I - Show more information
-- Y - Change process sorting (CPU/Memory)
+- I or ENTER - Show detailed information modal for focused widget
 
 Quick Navigation:
 - C - Focus CPU widget
@@ -27,20 +28,12 @@ Quick Navigation:
 - P - Focus Process widget
 - G - Focus GPU widget
 
-Widget Information:
-- I or ENTER - Show detailed information modal for focused widget
-
 Process Management:
-- K - Kill selected process (platform-specific methods)
+- K - Kill selected process
 - F - Search/filter processes
 - Up/Down or W/S - Navigate process list
-- I - View process details
-
-Process Kill Methods:
-- Kill - Graceful termination (recommended)
-- Force Kill - Immediate termination
-- Platform-specific optimizations for Windows/Linux
-`
+- I - View selected process details
+- Y - Change process sorting (CPU/Memory)`
 
 	modal := tview.NewModal().
 		SetText(helpText).
@@ -49,6 +42,7 @@ Process Kill Methods:
 		SetTextColor(tcell.ColorWhite).
 		SetButtonBackgroundColor(tcell.ColorBlue).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+			d.InModalState = false
 			d.App.SetRoot(d.MainWidget, true)
 		})
 
@@ -65,6 +59,8 @@ Process Kill Methods:
 }
 
 func (d *Dashboard) showProcessSearch() {
+	d.InModalState = true
+
 	form := tview.NewForm().
 		SetButtonsAlign(tview.AlignCenter).
 		SetFieldTextColor(tcell.ColorWhite).
@@ -75,6 +71,10 @@ func (d *Dashboard) showProcessSearch() {
 		SetLabel("Search term: ").
 		SetFieldWidth(30).
 		SetPlaceholder("Enter process name, PID, or CPU/MEM %")
+
+	if d.ProcessFilterActive {
+		searchInput.SetText(d.ProcessFilterTerm)
+	}
 
 	originalProcesses := make([]string, 0)
 	for i := 0; i < d.ProcessWidget.GetItemCount(); i++ {
@@ -88,7 +88,27 @@ func (d *Dashboard) showProcessSearch() {
 		filterType: "all",
 	}
 
-	form.AddDropDown("Filter by:", []string{"All", "High CPU (>50%)", "High Memory (>50%)", "System Processes", "User Processes"}, 0,
+	if d.ProcessFilterActive {
+		filterState.filterType = d.ProcessFilterType
+	}
+
+	var dropdownIndex int
+	switch filterState.filterType {
+	case "all":
+		dropdownIndex = 0
+	case "highcpu":
+		dropdownIndex = 1
+	case "highmem":
+		dropdownIndex = 2
+	case "system":
+		dropdownIndex = 3
+	case "user":
+		dropdownIndex = 4
+	default:
+		dropdownIndex = 0
+	}
+
+	form.AddDropDown("Filter by:", []string{"All", "High CPU (>50%)", "High Memory (>50%)", "System Processes", "User Processes"}, dropdownIndex,
 		func(option string, index int) {
 			switch index {
 			case 0:
@@ -105,12 +125,14 @@ func (d *Dashboard) showProcessSearch() {
 			applyProcessFilter(d, searchInput.GetText(), filterState.filterType, originalProcesses)
 		})
 
+	form.AddFormItem(searchInput)
+
 	searchInput.SetChangedFunc(func(text string) {
 		applyProcessFilter(d, text, filterState.filterType, originalProcesses)
 	})
 
-	form.AddFormItem(searchInput)
 	form.AddButton("Apply", func() {
+		d.InModalState = false
 		d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
 	}).
 		AddButton("Reset", func() {
@@ -122,11 +144,20 @@ func (d *Dashboard) showProcessSearch() {
 			for _, proc := range originalProcesses {
 				d.ProcessWidget.AddItem(proc, "", 0, nil)
 			}
+			d.InModalState = false
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
 		}).
 		AddButton("Close", func() {
+			d.InModalState = false
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
 		})
+
+	form.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if event.Key() == tcell.KeyTab {
+			return tcell.NewEventKey(tcell.KeyTab, 0, tcell.ModNone)
+		}
+		return event
+	})
 
 	flex := tview.NewFlex().
 		AddItem(nil, 0, 1, false).
@@ -137,7 +168,7 @@ func (d *Dashboard) showProcessSearch() {
 			AddItem(nil, 0, 1, false), 0, 1, true).
 		AddItem(nil, 0, 1, false)
 
-	d.App.SetRoot(flex, true).SetFocus(searchInput)
+	d.App.SetRoot(flex, true).SetFocus(form)
 }
 
 func applyProcessFilter(d *Dashboard, searchTerm, filterType string, originalProcesses []string) {
@@ -153,7 +184,7 @@ func applyProcessFilter(d *Dashboard, searchTerm, filterType string, originalPro
 		pidStart := strings.Index(proc, "(PID: ")
 		if pidStart != -1 {
 			pidEnd := strings.Index(proc[pidStart:], ")")
-			if pidEnd != -1 {
+			if pidEnd != -1 && pidStart+6 < len(proc) && pidStart+pidEnd < len(proc) {
 				pidStr := proc[pidStart+6 : pidStart+pidEnd]
 				fmt.Sscanf(pidStr, "%d", &pid)
 			}
@@ -196,6 +227,8 @@ func applyProcessFilter(d *Dashboard, searchTerm, filterType string, originalPro
 }
 
 func (d *Dashboard) quitModal() {
+	d.InModalState = true
+
 	modal := tview.NewModal().
 		SetText("Are you sure you want to quit?").
 		AddButtons([]string{"Yes", "No"}).
@@ -203,6 +236,7 @@ func (d *Dashboard) quitModal() {
 			if buttonLabel == "Yes" {
 				d.App.Stop()
 			} else {
+				d.InModalState = false
 				d.App.SetRoot(d.MainWidget, true)
 			}
 		})
@@ -210,12 +244,15 @@ func (d *Dashboard) quitModal() {
 }
 
 func (d *Dashboard) showProcessKillModal(selectedPID int32) {
+	d.InModalState = true
+
 	canKill, reason := processes.CanKillProcess(selectedPID)
 	if !canKill {
 		modal := tview.NewModal().
 			SetText(fmt.Sprintf("Cannot kill process PID %d: %s", selectedPID, reason)).
 			AddButtons([]string{"OK"}).
 			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+				d.InModalState = false
 				d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
 			})
 		d.App.SetRoot(modal, false).SetFocus(modal)
@@ -251,28 +288,35 @@ func (d *Dashboard) showProcessKillModal(selectedPID int32) {
 					return
 				}
 			}
+			d.InModalState = false
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
 		})
 	d.App.SetRoot(modal, false).SetFocus(modal)
 }
 
 func (d *Dashboard) showKillResultModal(pid int32, errorMsg string) {
+	d.InModalState = true
+
 	modal := tview.NewModal().
 		SetText(fmt.Sprintf("Failed to kill process PID %d:\n%s", pid, errorMsg)).
 		AddButtons([]string{"OK"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+			d.InModalState = false
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
 		})
 	d.App.SetRoot(modal, false).SetFocus(modal)
 }
 
 func (d *Dashboard) showProcessTreeModal() {
+	d.InModalState = true
+
 	tree, err := processes.GetProcessTree()
 	if err != nil {
 		modal := tview.NewModal().
 			SetText(fmt.Sprintf("Error loading process tree: %v", err)).
 			AddButtons([]string{"Ok"}).
 			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+				d.InModalState = false
 				d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessTreeWidget)
 			})
 		d.App.SetRoot(modal, false).SetFocus(modal)
@@ -319,12 +363,14 @@ func (d *Dashboard) showProcessTreeModal() {
 	textView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyEscape:
+			d.InModalState = false
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessTreeWidget)
 			return nil
 		}
 
 		switch event.Rune() {
 		case 'q', 'Q':
+			d.InModalState = false
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessTreeWidget)
 			return nil
 		}

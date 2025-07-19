@@ -100,7 +100,7 @@ func GetNetworkFormattedInfo() string {
 	if len(stats) > 0 {
 		netStat := stats[0]
 
-		info += "=== Overall Network Statistics ===\n"
+		info += "Overall Network Statistics\n"
 		info += fmt.Sprintf("Bytes Sent/Received: %.2f/%.2f GB\n", float64(netStat.BytesSent)/1024/1024/1024, float64(netStat.BytesRecv)/1024/1024/1024)
 		info += fmt.Sprintf("Packets Sent/Received: %d/%d\n", netStat.PacketsSent, netStat.PacketsRecv)
 		info += fmt.Sprintf("Send/Receive Errors: %d/%d\n", netStat.Errin, netStat.Errout)
@@ -111,7 +111,7 @@ func GetNetworkFormattedInfo() string {
 	info += fmt.Sprintf("Up/Down Speed: %s / %s\n", formatBytes(bytesSentPerSec), formatBytes(bytesRecvPerSec))
 	info += "\n"
 
-	info += "=== Network Interfaces ===\n"
+	info += "Network Interfaces\n"
 	interfaces := GetInterfaces()
 	for _, iface := range interfaces {
 		info += fmt.Sprintf("• %s\n", iface)
@@ -119,7 +119,7 @@ func GetNetworkFormattedInfo() string {
 
 	interfaceStats, err := net.IOCounters(true)
 	if err == nil && len(interfaceStats) > 0 {
-		info += "\n=== Per-Interface Statistics ===\n"
+		info += "\nPer-Interface Statistics\n"
 		for _, iface := range interfaceStats {
 			if iface.BytesSent > 0 || iface.BytesRecv > 0 {
 				info += fmt.Sprintf("Interface: %s\n", iface.Name)

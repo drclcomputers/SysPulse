@@ -2,11 +2,27 @@ package memory
 
 import (
 	"fmt"
+	"strings"
 	"syspulse/internal/utils"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 	"github.com/shirou/gopsutil/mem"
 )
+
+func getMemoryBar(used, total float64, barColor string, d *utils.Dashboard) string {
+	usedPercent := 0.0
+	if total != 0 {
+		usedPercent = (used / total) * 100
+	}
+	barWidth := 15
+	usedWidth := int((usedPercent / 100) * float64(barWidth))
+
+	usedBar := strings.Repeat(utils.BAR, usedWidth)
+	emptyBar := strings.Repeat("░", barWidth-usedWidth)
+
+	return fmt.Sprintf("[%s]%s[-][%s]%s[-]", barColor, usedBar, utils.GetColorFromName(d.Theme.Foreground), emptyBar)
+}
 
 func VMem() {
 	vm, _ := mem.VirtualMemory()
@@ -21,20 +37,30 @@ func UpdateVMem(d *utils.Dashboard) {
 	if VmemStat, err := mem.VirtualMemory(); err == nil {
 		d.VMemData = VmemStat
 		d.SMemData = GetSwapMem()
+		if d.SMemData == nil {
+			d.SMemData = &mem.SwapMemoryStat{
+				Total: 0,
+				Free:  0,
+				Used:  0,
+			}
+		}
+
 		d.MemWidget.SetDrawFunc(func(screen tcell.Screen, x, y, w, h int) (int, int, int, int) {
-			VMemusedGB := float64(d.VMemData.Used) / 1e9
-			VMemtotalGB := float64(d.VMemData.Total) / 1e9
-			VMembarCount := int((VMemusedGB / VMemtotalGB) * 10)
+			VMemusedGB := float64(d.VMemData.Used) / 1024 / 1024 / 1024
+			VMemtotalGB := float64(d.VMemData.Total) / 1024 / 1024 / 1024
+			VMembar := getMemoryBar(VMemusedGB, VMemtotalGB, d.Theme.Memory.VMemGauge, d)
 
-			SMemusedGB := float64(d.SMemData.Used) / 1e9
-			SMemtotalGB := float64(d.SMemData.Total) / 1e9
-			SMembarCount := int((SMemusedGB / SMemtotalGB) * 10)
+			SMemusedGB := float64(d.SMemData.Used) / 1024 / 1024 / 1024
+			SMemtotalGB := float64(d.SMemData.Total) / 1024 / 1024 / 1024
+			SMembar := getMemoryBar(SMemusedGB, SMemtotalGB, d.Theme.Memory.SMemGauge, d)
 
-			vMemText := fmt.Sprintf("Virtual (RAM): %s%.1f/%.1fGB", utils.BarColor("█", VMembarCount, d.Theme.Memory.VMemGauge), VMemusedGB, VMemtotalGB)
-			currentY := utils.SafePrintText(screen, vMemText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.Memory.ForegroundColor))
+			currentY := 3
+			vMemText := fmt.Sprintf("RAM : %s %.1f/%.1fGB", VMembar, VMemusedGB, VMemtotalGB)
+			tview.Print(screen, vMemText, x+2, currentY, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.Memory.ForegroundColor))
+			currentY += 2
 
-			sMemText := fmt.Sprintf("Swap Memory  : %s%.1f/%.1fGB", utils.BarColor("█", SMembarCount, d.Theme.Memory.SMemGauge), SMemusedGB, SMemtotalGB)
-			utils.SafePrintText(screen, sMemText, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Memory.ForegroundColor))
+			sMemText := fmt.Sprintf("Swap: %s %.1f/%.1fGB", SMembar, SMemusedGB, SMemtotalGB)
+			tview.Print(screen, sMemText, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Memory.ForegroundColor))
 			return x, y, w, h
 		})
 	}

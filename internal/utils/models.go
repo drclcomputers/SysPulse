@@ -130,6 +130,8 @@ type Dashboard struct {
 	ProcessFilterTerm   string
 	ProcessFilterType   string
 
+	InModalState bool
+
 	PluginManager interface{}
 	PluginWidgets map[string]tview.Primitive
 }

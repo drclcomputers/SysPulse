@@ -306,52 +306,67 @@ func (d *Dashboard) addWidgetsToGrid(grid *tview.Grid) {
 
 func (d *Dashboard) setupInputHandlers(focusableWidgets []tview.Primitive) {
 	currentFocus := -1
-	d.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		case tcell.KeyTab:
-			if len(focusableWidgets) > 0 {
-				currentFocus = (currentFocus + 1) % len(focusableWidgets)
-				d.App.SetFocus(focusableWidgets[currentFocus])
-			}
-			return nil
-		case tcell.KeyBacktab:
-			if len(focusableWidgets) > 0 {
-				currentFocus--
-				if currentFocus < 0 {
-					currentFocus = len(focusableWidgets) - 1
-				}
-				d.App.SetFocus(focusableWidgets[currentFocus])
-			}
-			return nil
-		}
 
-		switch event.Rune() {
-		case 'q', 'Q':
-			d.quitModal()
-			return nil
-		case 'c', 'C':
-			if d.CpuWidget != nil {
-				d.App.SetFocus(focusableWidgets[0])
+	d.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if !d.InModalState {
+			isMainWidgetActive := !d.InModalState
+
+			currentFocused := d.App.GetFocus()
+			isInputField := false
+			if _, ok := currentFocused.(*tview.InputField); ok {
+				isInputField = true
 			}
-		case 'm', 'M':
-			if d.MemWidget != nil {
-				d.App.SetFocus(focusableWidgets[1])
+
+			shouldProcessGlobalKeys := isMainWidgetActive && !isInputField
+
+			switch event.Key() {
+			case tcell.KeyTab:
+				if isMainWidgetActive && len(focusableWidgets) > 0 {
+					currentFocus = (currentFocus + 1) % len(focusableWidgets)
+					d.App.SetFocus(focusableWidgets[currentFocus])
+				}
+				return nil
+			case tcell.KeyBacktab:
+				if isMainWidgetActive && len(focusableWidgets) > 0 {
+					currentFocus--
+					if currentFocus < 0 {
+						currentFocus = len(focusableWidgets) - 1
+					}
+					d.App.SetFocus(focusableWidgets[currentFocus])
+				}
+				return nil
 			}
-		case 'd', 'D':
-			if d.DiskWidget != nil {
-				d.App.SetFocus(focusableWidgets[2])
+
+			switch event.Rune() {
+			case 'q', 'Q':
+				d.quitModal()
+				return nil
+			case 'c', 'C':
+				if shouldProcessGlobalKeys && d.CpuWidget != nil {
+					d.App.SetFocus(d.CpuWidget)
+				}
+			case 'm', 'M':
+				if shouldProcessGlobalKeys && d.MemWidget != nil {
+					d.App.SetFocus(d.MemWidget)
+				}
+			case 'd', 'D':
+				if shouldProcessGlobalKeys && d.DiskWidget != nil {
+					d.App.SetFocus(d.DiskWidget)
+				}
+			case 'n', 'N':
+				if shouldProcessGlobalKeys && d.NetWidget != nil {
+					d.App.SetFocus(d.NetWidget)
+				}
+			case 'p', 'P':
+				if shouldProcessGlobalKeys && d.ProcessWidget != nil {
+					d.App.SetFocus(d.ProcessWidget)
+				}
+			case 'h', 'H':
+				if shouldProcessGlobalKeys {
+					d.showHelpModal()
+				}
+				return nil
 			}
-		case 'n', 'N':
-			if d.NetWidget != nil {
-				d.App.SetFocus(focusableWidgets[3])
-			}
-		case 'p', 'P':
-			if d.ProcessWidget != nil {
-				d.App.SetFocus(focusableWidgets[4])
-			}
-		case 'h', 'H':
-			d.showHelpModal()
-			return nil
 		}
 
 		return event
