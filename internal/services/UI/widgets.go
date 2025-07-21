@@ -41,7 +41,7 @@ func (d *Dashboard) initHeaderWidget() {
 	d.HeaderWidget.SetTitle(createHeaderTitle()).
 		SetTitleColor(tview.Styles.PrimaryTextColor)
 	d.HeaderWidget.SetTitleAlign(tview.AlignCenter)
-	d.HeaderWidget.SetBorder(true)
+	utils.SetBorderStyle(d.HeaderWidget)
 	d.HeaderWidget.SetBackgroundColor(utils.GetColorFromName(d.Theme.Background))
 	d.HeaderWidget.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		key := event.Rune()
@@ -66,9 +66,9 @@ func (d *Dashboard) initHeaderWidget() {
 
 func (d *Dashboard) initCPUWidget() {
 	if d.Theme.Layout.CPU.Enabled {
-		d.CpuWidget = tview.NewBox().
-			SetBorder(true).
-			SetTitle(fmt.Sprint("CPU | ", sysinfo.GetCpuName())).
+		d.CpuWidget = tview.NewBox()
+		utils.SetBorderStyle(d.CpuWidget)
+		d.CpuWidget.SetTitle(fmt.Sprint("CPU | ", sysinfo.GetCpuName())).
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
 				switch key {
@@ -100,9 +100,9 @@ func (d *Dashboard) initCPUWidget() {
 
 func (d *Dashboard) initMemoryWidget() {
 	if d.Theme.Layout.Memory.Enabled {
-		d.MemWidget = tview.NewBox().
-			SetBorder(true).
-			SetTitle(fmt.Sprint("Memory Usage | ", memory.GetRAM())).
+		d.MemWidget = tview.NewBox()
+		utils.SetBorderStyle(d.MemWidget)
+		d.MemWidget.SetTitle(fmt.Sprint("Memory Usage | ", memory.GetRAM())).
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
 				switch key {
@@ -134,9 +134,9 @@ func (d *Dashboard) initMemoryWidget() {
 
 func (d *Dashboard) initDiskWidget() {
 	if d.Theme.Layout.Disk.Enabled {
-		d.DiskWidget = tview.NewBox().
-			SetBorder(true).
-			SetTitle(fmt.Sprint("Disk Usage | ", disk.GetNumberofPartitions())).
+		d.DiskWidget = tview.NewBox()
+		utils.SetBorderStyle(d.DiskWidget)
+		d.DiskWidget.SetTitle(fmt.Sprint("Disk Usage | ", disk.GetNumberofPartitions())).
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
 				switch key {
@@ -168,9 +168,9 @@ func (d *Dashboard) initDiskWidget() {
 
 func (d *Dashboard) initNetworkWidget() {
 	if d.Theme.Layout.Network.Enabled {
-		d.NetWidget = tview.NewBox().
-			SetBorder(true).
-			SetTitle("Network Activity / Interfaces").
+		d.NetWidget = tview.NewBox()
+		utils.SetBorderStyle(d.NetWidget)
+		d.NetWidget.SetTitle("Network Activity / Interfaces").
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
 				switch key {
@@ -202,9 +202,9 @@ func (d *Dashboard) initNetworkWidget() {
 
 func (d *Dashboard) initGPUWidget() {
 	if d.Theme.Layout.GPU.Enabled {
-		d.GPUWidget = tview.NewBox().
-			SetBorder(true).
-			SetTitle(fmt.Sprint("GPU | ", gpu.GetGPUTitle())).
+		d.GPUWidget = tview.NewBox()
+		utils.SetBorderStyle(d.GPUWidget)
+		d.GPUWidget.SetTitle(fmt.Sprint("GPU | ", gpu.GetGPUTitle())).
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				key := event.Rune()
 				switch key {
@@ -237,7 +237,7 @@ func (d *Dashboard) initGPUWidget() {
 func (d *Dashboard) initProcessWidget() {
 	if d.Theme.Layout.Process.Enabled {
 		d.ProcessWidget = tview.NewList()
-		d.ProcessWidget.SetBorder(true)
+		utils.SetBorderStyle(d.ProcessWidget.Box)
 		d.ProcessWidget.SetTitle(fmt.Sprint("Processes - ", processes.GetNrProcesses()))
 		d.ProcessWidget.ShowSecondaryText(false)
 		d.ProcessWidget.SetSelectedBackgroundColor(tcell.ColorDarkBlue)
@@ -317,9 +317,9 @@ func (d *Dashboard) getProcessInputHandler() func(event *tcell.EventKey) *tcell.
 }
 
 func (d *Dashboard) initLoadWidget() {
-	d.LoadWidget = tview.NewBox().
-		SetBorder(true).
-		SetTitle("Load Average").
+	d.LoadWidget = tview.NewBox()
+	utils.SetBorderStyle(d.LoadWidget)
+	d.LoadWidget.SetTitle("Load Average").
 		SetTitleAlign(tview.AlignCenter)
 	d.LoadWidget.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		key := event.Rune()
@@ -347,9 +347,9 @@ func (d *Dashboard) initLoadWidget() {
 }
 
 func (d *Dashboard) initTemperatureWidget() {
-	d.TemperatureWidget = tview.NewBox().
-		SetBorder(true).
-		SetTitle("Temperature").
+	d.TemperatureWidget = tview.NewBox()
+	utils.SetBorderStyle(d.TemperatureWidget)
+	d.TemperatureWidget.SetTitle("Temperature").
 		SetTitleAlign(tview.AlignCenter)
 	d.TemperatureWidget.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		key := event.Rune()
@@ -377,9 +377,9 @@ func (d *Dashboard) initTemperatureWidget() {
 }
 
 func (d *Dashboard) initNetworkConnsWidget() {
-	d.NetworkConnsWidget = tview.NewBox().
-		SetBorder(true).
-		SetTitle("Network Connections").
+	d.NetworkConnsWidget = tview.NewBox()
+	utils.SetBorderStyle(d.NetworkConnsWidget)
+	d.NetworkConnsWidget.SetTitle("Network Connections").
 		SetTitleAlign(tview.AlignCenter)
 	d.NetworkConnsWidget.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		key := event.Rune()
@@ -400,9 +400,9 @@ func (d *Dashboard) initNetworkConnsWidget() {
 }
 
 func (d *Dashboard) initDiskIOWidget() {
-	d.DiskIOWidget = tview.NewBox().
-		SetBorder(true).
-		SetTitle("Disk I/O").
+	d.DiskIOWidget = tview.NewBox()
+	utils.SetBorderStyle(d.DiskIOWidget)
+	d.DiskIOWidget.SetTitle("Disk I/O").
 		SetTitleAlign(tview.AlignCenter)
 	d.DiskIOWidget.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		key := event.Rune()
@@ -430,9 +430,9 @@ func (d *Dashboard) initDiskIOWidget() {
 }
 
 func (d *Dashboard) initProcessTreeWidget() {
-	d.ProcessTreeWidget = tview.NewBox().
-		SetBorder(true).
-		SetTitle("Process Tree").
+	d.ProcessTreeWidget = tview.NewBox()
+	utils.SetBorderStyle(d.ProcessTreeWidget)
+	d.ProcessTreeWidget.SetTitle("Process Tree").
 		SetTitleAlign(tview.AlignCenter)
 	d.ProcessTreeWidget.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		key := event.Rune()
@@ -452,9 +452,9 @@ func (d *Dashboard) initProcessTreeWidget() {
 }
 
 func (d *Dashboard) initBatteryWidget() {
-	d.BatteryWidget = tview.NewBox().
-		SetBorder(true).
-		SetTitle("Battery").
+	d.BatteryWidget = tview.NewBox()
+	utils.SetBorderStyle(d.BatteryWidget)
+	d.BatteryWidget.SetTitle("Battery").
 		SetTitleAlign(tview.AlignCenter)
 	d.BatteryWidget.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		key := event.Rune()

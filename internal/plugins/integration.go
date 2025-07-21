@@ -125,7 +125,7 @@ func AddPluginWidgetsToLayout(dashboard *utils.Dashboard, mainFlex *tview.Flex) 
 		if info.Config.Enabled && info.Widget != nil {
 			container := tview.NewFlex().SetDirection(tview.FlexRow)
 			container.AddItem(info.Widget, 0, 1, false)
-			container.SetBorder(true)
+			utils.SetBorderStyle(container.Box)
 			container.SetTitle(info.Name + " v" + info.Version)
 
 			mainFlex.AddItem(container, 0, 1, false)

@@ -49,7 +49,7 @@ func (p *ExamplePlugin) Shutdown() error {
 
 func (p *ExamplePlugin) CreateWidget() (tview.Primitive, error) {
 	textView := tview.NewTextView()
-	textView.SetBorder(true)
+	utils.SetBorderStyle(textView.Box)
 	textView.SetTitle(p.config.Layout.Title)
 	textView.SetDynamicColors(true)
 

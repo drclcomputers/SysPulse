@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -155,4 +156,36 @@ func RepeatString(str string, count int) string {
 		return ""
 	}
 	return strings.Repeat(str, count)
+}
+
+func GetTerminalCapabilities() bool {
+	term := os.Getenv("TERM")
+	basicTerms := []string{"linux", "vt100", "vt102", "vt220", "ansi", "dumb"}
+
+	for _, basicTerm := range basicTerms {
+		if strings.Contains(term, basicTerm) {
+			return false
+		}
+	}
+
+	if os.Getenv("SSH_CLIENT") != "" || os.Getenv("SSH_TTY") != "" {
+		return false
+	}
+
+	return true
+}
+
+func SetBorderStyle(box *tview.Box) {
+	if !GetTerminalCapabilities() {
+		box.SetBorder(true).SetBorderAttributes(tcell.AttrBold)
+	} else {
+		box.SetBorder(true)
+	}
+}
+
+func GetBorderChar() string {
+	if !GetTerminalCapabilities() {
+		return "|"
+	}
+	return "│"
 }
