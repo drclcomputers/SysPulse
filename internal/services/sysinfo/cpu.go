@@ -42,7 +42,7 @@ func GetCpuFormattedInfo() string {
 	var output string
 
 	for i, cpu := range info {
-		if len(info) > 1 {
+		if i > 1 {
 			output += fmt.Sprintf("\n--- CPU %d ---\n", i)
 		} else {
 			output += fmt.Sprintf("--- CPU %d ---\n", i)
@@ -114,13 +114,6 @@ func containsFlag(flags []string, target string) bool {
 	return false
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func UpdateCPU(d *utils.Dashboard) {
 	if d.CpuWidget == nil {
 		return
@@ -142,13 +135,12 @@ func UpdateCPU(d *utils.Dashboard) {
 
 	d.CpuData = percents
 	d.CpuWidget.SetDrawFunc(func(screen tcell.Screen, x, y, w, h int) (int, int, int, int) {
-		barCount := int(totalUsage / 12)
 		color := d.Theme.CPU.BarLow
 		if totalUsage > 80 {
 			color = d.Theme.CPU.BarHigh
 		}
 
-		totalText := fmt.Sprintf("Total CPU usage: %s %.0f%%", utils.BarColor(utils.BAR, barCount, color), totalUsage)
+		totalText := fmt.Sprintf("Total CPU usage: %s %.0f%%", utils.BarColor(utils.BAR, w/3, color), totalUsage)
 		tview.Print(screen, totalText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.CPU.ForegroundColor))
 
 		currentY := y + 2
@@ -160,12 +152,11 @@ func UpdateCPU(d *utils.Dashboard) {
 		}
 
 		for i, p := range d.CpuData {
-			barCount := int(p / 10)
 			color := d.Theme.CPU.BarLow
 			if p > 80 {
 				color = d.Theme.CPU.BarHigh
 			}
-			coreText := fmt.Sprintf("Core %d: %s %.0f%%", i, utils.BarColor(utils.BAR, barCount, color), p)
+			coreText := fmt.Sprintf("Core %d: %s %.0f%%", i, utils.BarColor(utils.BAR, w/3, color), p)
 
 			col := i % maxCols
 			row := i / maxCols

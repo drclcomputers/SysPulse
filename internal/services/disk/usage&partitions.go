@@ -10,9 +10,9 @@ import (
 	"github.com/shirou/gopsutil/disk"
 )
 
-func getDiskBar(used, total float64, theme utils.DISKModel) string {
+func getDiskBar(used, total float64, theme utils.DISKModel, w int) string {
 	usedPercent := (used / total) * 100
-	barWidth := 15
+	barWidth := w / 3
 	usedWidth := int((usedPercent / 100) * float64(barWidth))
 
 	var barColor string
@@ -49,7 +49,7 @@ func UpdateDisk(d *utils.Dashboard) {
 				used := float64(u.Used) / 1024 / 1024 / 1024
 				total := float64(u.Total) / 1024 / 1024 / 1024
 				//free := float64(u.Free) / 1024 / 1024 / 1024
-				bar := getDiskBar(used, total, d.Theme.Disk)
+				bar := getDiskBar(used, total, d.Theme.Disk, w)
 
 				if currentY >= y+h-1 {
 					break

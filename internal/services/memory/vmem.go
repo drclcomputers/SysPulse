@@ -10,12 +10,12 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
-func getMemoryBar(used, total float64, barColor string, d *utils.Dashboard) string {
+func getMemoryBar(used, total float64, barColor string, d *utils.Dashboard, w int) string {
 	usedPercent := 0.0
 	if total != 0 {
 		usedPercent = (used / total) * 100
 	}
-	barWidth := 15
+	barWidth := w / 3
 	usedWidth := int((usedPercent / 100) * float64(barWidth))
 
 	usedBar := strings.Repeat(utils.BAR, usedWidth)
@@ -48,11 +48,11 @@ func UpdateVMem(d *utils.Dashboard) {
 		d.MemWidget.SetDrawFunc(func(screen tcell.Screen, x, y, w, h int) (int, int, int, int) {
 			VMemusedGB := float64(d.VMemData.Used) / 1024 / 1024 / 1024
 			VMemtotalGB := float64(d.VMemData.Total) / 1024 / 1024 / 1024
-			VMembar := getMemoryBar(VMemusedGB, VMemtotalGB, d.Theme.Memory.VMemGauge, d)
+			VMembar := getMemoryBar(VMemusedGB, VMemtotalGB, d.Theme.Memory.VMemGauge, d, w)
 
 			SMemusedGB := float64(d.SMemData.Used) / 1024 / 1024 / 1024
 			SMemtotalGB := float64(d.SMemData.Total) / 1024 / 1024 / 1024
-			SMembar := getMemoryBar(SMemusedGB, SMemtotalGB, d.Theme.Memory.SMemGauge, d)
+			SMembar := getMemoryBar(SMemusedGB, SMemtotalGB, d.Theme.Memory.SMemGauge, d, w)
 
 			currentY := 3
 			vMemText := fmt.Sprintf("RAM : %s %.1f/%.1fGB", VMembar, VMemusedGB, VMemtotalGB)
