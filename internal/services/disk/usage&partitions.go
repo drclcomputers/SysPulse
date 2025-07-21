@@ -123,7 +123,7 @@ func GetDiskFormattedInfo() string {
 		//info += fmt.Sprintf("Inodes Used: %d (%.1f%%)\n", usage.InodesUsed, usage.InodesUsedPercent)
 		//info += fmt.Sprintf("Inodes Free: %d\n", usage.InodesFree)
 
-		if usage.UsedPercent < 70 {
+		/*if usage.UsedPercent < 70 {
 			info += "Status: Good - plenty of space available\n"
 		} else if usage.UsedPercent < 85 {
 			info += "Status: Moderate - consider cleaning up files\n"
@@ -131,7 +131,7 @@ func GetDiskFormattedInfo() string {
 			info += "Status: Warning - running low on space\n"
 		} else {
 			info += "Status: Critical - almost full!\n"
-		}
+		}*/
 
 		totalUsed += usage.Used
 		totalSize += usage.Total

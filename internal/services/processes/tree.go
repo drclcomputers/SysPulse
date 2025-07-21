@@ -225,7 +225,8 @@ func GetProcessTreeFormattedInfo() string {
 		return fmt.Sprintf("Process Tree: Error - %v", err)
 	}
 
-	info := "Process Tree Structure\n\n"
+	var info string
+
 	info += fmt.Sprintf("Total Processes: %d\n", tree.TotalCount)
 	info += fmt.Sprintf("Last Update: %s\n\n", tree.LastUpdate.Format("15:04:05"))
 

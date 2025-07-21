@@ -243,7 +243,7 @@ func GetDiskIOFormattedInfo() string {
 		return fmt.Sprintf("Disk I/O: Error - %v", err)
 	}
 
-	info := "Disk I/O Performance\n\n"
+	var info string
 
 	for _, device := range ioData.Disks {
 		info += fmt.Sprintf("Device: %s\n", device.Name)

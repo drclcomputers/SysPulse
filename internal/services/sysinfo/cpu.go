@@ -44,6 +44,8 @@ func GetCpuFormattedInfo() string {
 	for i, cpu := range info {
 		if len(info) > 1 {
 			output += fmt.Sprintf("\n--- CPU %d ---\n", i)
+		} else {
+			output += fmt.Sprintf("--- CPU %d ---\n", i)
 		}
 		output += fmt.Sprintf("Vendor: %s\n", cpu.VendorID)
 		output += fmt.Sprintf("Model: %s\n", cpu.ModelName)
@@ -51,28 +53,65 @@ func GetCpuFormattedInfo() string {
 		output += fmt.Sprintf("Model ID: %s\n", cpu.Model)
 		output += fmt.Sprintf("Stepping: %d\n", cpu.Stepping)
 		output += fmt.Sprintf("Cores: %d\n", cpu.Cores)
+		output += fmt.Sprintf("Threads: %d\n", len(percents))
 		output += fmt.Sprintf("Base Frequency: %.0f MHz\n", cpu.Mhz)
 		output += fmt.Sprintf("Cache Size: %d KB\n", cpu.CacheSize)
-		output += fmt.Sprintf("CPU Index: %d\n", cpu.CPU)
+		output += fmt.Sprintf("Architecture Support: %s\n", getArchitectureInfo(cpu.Flags))
 
-		output += fmt.Sprintf("Features: %s\n", strings.Join(cpu.Flags, ", "))
+		importantFlags := []string{"sse", "sse2", "sse3", "sse4_1", "sse4_2", "avx", "avx2", "avx512", "aes", "vmx", "hypervisor"}
+		var relevantFlags []string
+
+		for _, flag := range cpu.Flags {
+			for _, important := range importantFlags {
+				if strings.Contains(strings.ToLower(flag), important) {
+					relevantFlags = append(relevantFlags, flag)
+					break
+				}
+			}
+		}
+
+		if len(relevantFlags) > 0 {
+			output += fmt.Sprintf("Key Features: %s\n", strings.Join(relevantFlags, ", "))
+		}
+		output += fmt.Sprintf("Total Features: %d\n", len(cpu.Flags))
 	}
 
-	output += "\n=== Current CPU Usage ===\n"
-	output += fmt.Sprintf("Average CPU Usage: %.1f%%\n", totalUsage)
-
-	output += "\n=== CPU Health Status ===\n"
-	if totalUsage < 30 {
-		output += "• CPU Load: Low - system is running smoothly\n"
-	} else if totalUsage < 60 {
-		output += "• CPU Load: Moderate - normal usage levels\n"
-	} else if totalUsage < 80 {
-		output += "• CPU Load: High - system is working hard\n"
-	} else {
-		output += "• CPU Load: Very High - system may be under stress\n"
-	}
+	output += fmt.Sprintf("--- Average CPU Usage: %.1f%%\n", totalUsage)
 
 	return output
+}
+
+func getArchitectureInfo(flags []string) string {
+	features := []string{}
+	if containsFlag(flags, "avx512") {
+		features = append(features, "AVX-512")
+	} else if containsFlag(flags, "avx2") {
+		features = append(features, "AVX2")
+	} else if containsFlag(flags, "avx") {
+		features = append(features, "AVX")
+	}
+
+	if containsFlag(flags, "aes") {
+		features = append(features, "AES")
+	}
+
+	if containsFlag(flags, "vmx") || containsFlag(flags, "svm") {
+		features = append(features, "Virtualization")
+	}
+
+	if len(features) == 0 {
+		return "Basic"
+	}
+	return strings.Join(features, ", ")
+}
+
+func containsFlag(flags []string, target string) bool {
+	for _, flag := range flags {
+		if strings.Contains(strings.ToLower(flag), strings.ToLower(target)) {
+			return true
+		}
+	}
+	return false
 }
 
 func min(a, b int) int {

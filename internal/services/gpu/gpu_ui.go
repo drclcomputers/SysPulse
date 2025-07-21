@@ -196,7 +196,7 @@ func GetGPUFormattedInfo() string {
 
 	for i, gpu := range gpus {
 		if i > 0 {
-			info.WriteString("\n\n")
+			info.WriteString("\n")
 		}
 
 		info.WriteString(fmt.Sprintf("GPU %d: %s\n", i+1, gpu.Name))
