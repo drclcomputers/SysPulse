@@ -42,11 +42,7 @@ func GetCpuFormattedInfo() string {
 	var output string
 
 	for i, cpu := range info {
-		if i > 1 {
-			output += fmt.Sprintf("\n--- CPU %d ---\n", i)
-		} else {
-			output += fmt.Sprintf("--- CPU %d ---\n", i)
-		}
+		output += fmt.Sprintf("\n--- CPU %d ---\n", i)
 		output += fmt.Sprintf("Vendor: %s\n", cpu.VendorID)
 		output += fmt.Sprintf("Model: %s\n", cpu.ModelName)
 		output += fmt.Sprintf("Family: %s\n", cpu.Family)
