@@ -320,13 +320,13 @@ func (d *Dashboard) setupInputHandlers(focusableWidgets []tview.Primitive) {
 			shouldProcessGlobalKeys := isMainWidgetActive && !isInputField
 
 			switch event.Key() {
-			case tcell.KeyTab:
+			case tcell.KeyTab, tcell.KeyRight:
 				if isMainWidgetActive && len(focusableWidgets) > 0 {
 					currentFocus = (currentFocus + 1) % len(focusableWidgets)
 					d.App.SetFocus(focusableWidgets[currentFocus])
 				}
 				return nil
-			case tcell.KeyBacktab:
+			case tcell.KeyBacktab, tcell.KeyLeft:
 				if isMainWidgetActive && len(focusableWidgets) > 0 {
 					currentFocus--
 					if currentFocus < 0 {
@@ -341,27 +341,31 @@ func (d *Dashboard) setupInputHandlers(focusableWidgets []tview.Primitive) {
 			case 'q', 'Q':
 				d.quitModal()
 				return nil
-			case 'c', 'C':
+			case 'c', 'C', '1':
 				if shouldProcessGlobalKeys && d.CpuWidget != nil {
 					d.App.SetFocus(d.CpuWidget)
 				}
-			case 'm', 'M':
+			case 'm', 'M', '2':
 				if shouldProcessGlobalKeys && d.MemWidget != nil {
 					d.App.SetFocus(d.MemWidget)
 				}
-			case 'd', 'D':
+			case 'd', 'D', '3':
 				if shouldProcessGlobalKeys && d.DiskWidget != nil {
 					d.App.SetFocus(d.DiskWidget)
 				}
-			case 'n', 'N':
+			case 'n', 'N', '4':
 				if shouldProcessGlobalKeys && d.NetWidget != nil {
 					d.App.SetFocus(d.NetWidget)
 				}
-			case 'p', 'P':
+			case 'p', 'P', '5':
 				if shouldProcessGlobalKeys && d.ProcessWidget != nil {
 					d.App.SetFocus(d.ProcessWidget)
 				}
-			case 'h', 'H':
+			case 'g', 'G', '6':
+				if shouldProcessGlobalKeys && d.GPUWidget != nil {
+					d.App.SetFocus(d.GPUWidget)
+				}
+			case 'h', 'H', '0', rune(tcell.KeyF1):
 				if shouldProcessGlobalKeys {
 					d.showHelpModal()
 				}

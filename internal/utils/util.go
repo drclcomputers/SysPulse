@@ -15,7 +15,7 @@ const RED_BG_WHITE_FG = "\033[37;41m"
 const RESETCOLOUR = "\033[0m"
 
 const BAR = "█"
-const VER = "11.9.2 alpha"
+const VER = "11.9.4 alpha"
 
 func BarColor(char string, count int, color string) string {
 	if count < 0 {
