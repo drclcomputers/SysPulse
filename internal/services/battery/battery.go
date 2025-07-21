@@ -250,18 +250,6 @@ func GetBatteryFormattedInfo() string {
 
 	info += fmt.Sprintf("Last Update: %s\n\n", batteryInfo.LastUpdate.Format("15:04:05"))
 
-	info += "Battery Health Indicators:\n"
-	info += "• Good: 80-100% - Battery in excellent condition\n"
-	info += "• Fair: 60-79% - Battery showing some wear\n"
-	info += "• Poor: 40-59% - Battery degraded, consider replacement\n"
-	info += "• Critical: <40% - Battery needs immediate replacement\n\n"
-
-	info += "Power Management Tips:\n"
-	info += "• Keep battery level between 20-80% for longevity\n"
-	info += "• Avoid complete discharge cycles\n"
-	info += "• Use AC power when available for intensive tasks\n"
-	info += "• Monitor temperature to prevent overheating\n"
-
 	return info
 }
 

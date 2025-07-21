@@ -25,7 +25,6 @@ func GetCpuFormattedInfo() string {
 		return "Unknown CPU"
 	}
 
-	// Get current CPU usage
 	percents, err := cpu.Percent(0, true)
 	if err != nil {
 		percents = []float64{}
@@ -42,7 +41,6 @@ func GetCpuFormattedInfo() string {
 
 	var output string
 
-	output += "=== CPU Information ===\n"
 	for i, cpu := range info {
 		if len(info) > 1 {
 			output += fmt.Sprintf("\n--- CPU %d ---\n", i)
@@ -57,12 +55,7 @@ func GetCpuFormattedInfo() string {
 		output += fmt.Sprintf("Cache Size: %d KB\n", cpu.CacheSize)
 		output += fmt.Sprintf("CPU Index: %d\n", cpu.CPU)
 
-		if len(cpu.Flags) > 0 {
-			output += fmt.Sprintf("Features: %s\n", strings.Join(cpu.Flags[:min(10, len(cpu.Flags))], ", "))
-			if len(cpu.Flags) > 10 {
-				output += fmt.Sprintf("... and %d more features\n", len(cpu.Flags)-10)
-			}
-		}
+		output += fmt.Sprintf("Features: %s\n", strings.Join(cpu.Flags, ", "))
 	}
 
 	output += "\n=== Current CPU Usage ===\n"

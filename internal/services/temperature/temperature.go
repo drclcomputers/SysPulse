@@ -236,12 +236,6 @@ func GetTemperatureFormattedInfo() string {
 		}
 	}
 
-	info += "\nTemperature Thresholds:\n"
-	info += "• < 65°C: Normal (Green)\n"
-	info += "• 65-75°C: Warm (Yellow)\n"
-	info += "• 75-85°C: Hot (Orange)\n"
-	info += "• > 85°C: Critical (Red)\n"
-
 	return info
 }
 

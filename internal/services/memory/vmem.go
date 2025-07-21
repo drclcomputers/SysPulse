@@ -97,22 +97,5 @@ func GetMemoryFormattedInfo() string {
 	info += fmt.Sprintf("Used: %.2f GB (%.1f%%)\n", float64(swap.Used)/1024/1024/1024, swap.UsedPercent)
 	info += fmt.Sprintf("Free: %.2f GB\n", float64(swap.Free)/1024/1024/1024)
 
-	info += "\n=== Memory Health ===\n"
-	if vm.UsedPercent < 70 {
-		info += "• Memory Status: Good - plenty of available memory\n"
-	} else if vm.UsedPercent < 85 {
-		info += "• Memory Status: Moderate - consider closing unused applications\n"
-	} else {
-		info += "• Memory Status: High - system may be running low on memory\n"
-	}
-
-	if swap.UsedPercent > 50 {
-		info += "• Swap Usage: High - system is relying heavily on swap memory\n"
-	} else if swap.UsedPercent > 0 {
-		info += "• Swap Usage: Some swap in use - this is normal\n"
-	} else {
-		info += "• Swap Usage: None - system has sufficient RAM\n"
-	}
-
 	return info
 }
