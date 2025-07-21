@@ -140,7 +140,7 @@ func UpdateCPU(d *utils.Dashboard) {
 			color = d.Theme.CPU.BarHigh
 		}
 
-		totalText := fmt.Sprintf("Total CPU usage: %s %.0f%%", utils.BarColor(utils.BAR, w/3, color), totalUsage)
+		totalText := fmt.Sprintf("Total: %s %.0f%%", utils.BarColor(utils.BAR, w/3, color), totalUsage)
 		tview.Print(screen, totalText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.CPU.ForegroundColor))
 
 		currentY := y + 2

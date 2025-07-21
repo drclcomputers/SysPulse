@@ -6,7 +6,6 @@ import (
 	"syspulse/internal/utils"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/rivo/tview"
 )
 
 type LoadAverage struct {
@@ -67,15 +66,13 @@ func UpdateLoadAverage(d *utils.Dashboard) {
 		bar15 := createLoadBar(loadAvg.Load15, cpuCount, w/3)
 
 		bar1Text := fmt.Sprintf("1m:  %s", bar1)
-		tview.Print(screen, bar1Text, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Load.ForegroundColor))
-		currentY++
+		currentY = utils.SafePrintText(screen, bar1Text, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Load.ForegroundColor))
 
 		bar5Text := fmt.Sprintf("5m:  %s", bar5)
-		tview.Print(screen, bar5Text, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Load.ForegroundColor))
-		currentY++
+		currentY = utils.SafePrintText(screen, bar5Text, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Load.ForegroundColor))
 
 		bar15Text := fmt.Sprintf("15m: %s", bar15)
-		tview.Print(screen, bar15Text, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Load.ForegroundColor))
+		utils.SafePrintText(screen, bar15Text, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Load.ForegroundColor))
 
 		return x, y, w, h
 	})
