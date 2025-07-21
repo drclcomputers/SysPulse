@@ -77,7 +77,3 @@
 ---
 
 *This release focuses on improving information accessibility through enhanced modal scrolling and ensuring compatibility across diverse terminal environments. All changes are backward compatible and require no configuration updates.*
-
-**Made with ❤️ by drclcomputers**
-
-*For issues, feature requests, and contributions, visit our [GitHub repository](https://github.com/drclcomputers/syspulse)*
