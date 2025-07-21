@@ -76,15 +76,43 @@ func (d *Dashboard) initCPUWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					cpumodal := tview.NewModal().
-						SetText(sysinfo.GetCpuFormattedInfo()).
-						AddButtons([]string{"Ok"}).
-						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-							if buttonLabel == "Ok" {
-								d.App.SetRoot(d.MainWidget, true).SetFocus(d.CpuWidget)
-							}
-						})
-					d.App.SetRoot(cpumodal, false).SetFocus(cpumodal)
+					textView := tview.NewTextView().
+						SetDynamicColors(true).
+						SetRegions(true).
+						SetWordWrap(true).
+						SetScrollable(true).
+						SetText(sysinfo.GetCpuFormattedInfo())
+
+					utils.SetBorderStyle(textView.Box)
+					textView.SetTitle("CPU Information (Arrow keys to scroll, ESC to close)").
+						SetTitleAlign(tview.AlignCenter)
+
+					textView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+						switch event.Key() {
+						case tcell.KeyEscape:
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.CpuWidget)
+							return nil
+						}
+
+						switch event.Rune() {
+						case 'q', 'Q':
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.CpuWidget)
+							return nil
+						}
+
+						return event
+					})
+
+					flex := tview.NewFlex().
+						AddItem(nil, 0, 1, false).
+						AddItem(tview.NewFlex().
+							SetDirection(tview.FlexRow).
+							AddItem(nil, 0, 1, false).
+							AddItem(textView, 0, 10, true).
+							AddItem(nil, 0, 1, false), 0, 10, true).
+						AddItem(nil, 0, 1, false)
+
+					d.App.SetRoot(flex, true).SetFocus(textView)
 				}
 				return nil
 			})
@@ -144,15 +172,45 @@ func (d *Dashboard) initDiskWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					diskmodal := tview.NewModal().
-						SetText(disk.GetDiskFormattedInfo()).
-						AddButtons([]string{"Ok"}).
-						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-							if buttonLabel == "Ok" {
-								d.App.SetRoot(d.MainWidget, true).SetFocus(d.DiskWidget)
-							}
-						})
-					d.App.SetRoot(diskmodal, false).SetFocus(diskmodal)
+					// Create scrollable disk info modal
+					textView := tview.NewTextView().
+						SetDynamicColors(true).
+						SetRegions(true).
+						SetWordWrap(true).
+						SetScrollable(true).
+						SetText(disk.GetDiskFormattedInfo())
+
+					utils.SetBorderStyle(textView.Box)
+					textView.SetTitle("Disk Information (Arrow keys to scroll, ESC to close)").
+						SetTitleAlign(tview.AlignCenter)
+
+					textView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+						switch event.Key() {
+						case tcell.KeyEscape:
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.DiskWidget)
+							return nil
+						}
+
+						switch event.Rune() {
+						case 'q', 'Q':
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.DiskWidget)
+							return nil
+						}
+
+						return event
+					})
+
+					// Create flex layout for centered modal
+					flex := tview.NewFlex().
+						AddItem(nil, 0, 1, false).
+						AddItem(tview.NewFlex().
+							SetDirection(tview.FlexRow).
+							AddItem(nil, 0, 1, false).
+							AddItem(textView, 0, 10, true).
+							AddItem(nil, 0, 1, false), 0, 10, true).
+						AddItem(nil, 0, 1, false)
+
+					d.App.SetRoot(flex, true).SetFocus(textView)
 				}
 				return nil
 			})
