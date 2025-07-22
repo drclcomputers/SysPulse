@@ -26,7 +26,7 @@ func getNetworkBar(bytesPerSec float64, barColor string, d *utils.Dashboard, w i
 		percentage = 100
 	}
 
-	barWidth := w / 3
+	barWidth := w / 4
 	if barWidth < 10 {
 		barWidth = 10
 	}

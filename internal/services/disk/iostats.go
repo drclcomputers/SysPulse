@@ -123,7 +123,7 @@ func UpdateDiskIO(d *utils.Dashboard) {
 
 			deviceName := truncateDeviceName(device.Name, 8)
 			deviceLine := fmt.Sprintf("%s", deviceName)
-			currentY = utils.SafePrintText(screen, deviceLine, x+3, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.DiskIO.ForegroundColor))
+			currentY = utils.SafePrintText(screen, deviceLine, x+2, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.DiskIO.ForegroundColor))
 
 			if currentY >= y+h-1 {
 				break
