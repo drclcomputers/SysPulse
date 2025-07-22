@@ -17,21 +17,6 @@ const RESETCOLOUR = "\033[0m"
 const BAR = "█"
 const VER = "11.9.4 alpha"
 
-func BarColor(char string, count int, color string) string {
-	if count < 0 {
-		count = 0
-	}
-	if count > 10 {
-		count = 10
-	}
-	bars := strings.Repeat(char, count)
-	if count == 0 {
-		bars = " "
-	}
-	coloredBars := fmt.Sprintf("[%s]%s[-]", color, bars)
-	return coloredBars + strings.Repeat(" ", 10-count)
-}
-
 func Between(value, min, max int) int {
 	if value < min {
 		return min
@@ -188,4 +173,17 @@ func GetBorderChar() string {
 		return "|"
 	}
 	return "│"
+}
+
+// BarColor creates a colored bar with the specified character, count, and color
+func BarColor(char string, count int, color string) string {
+	if count <= 0 {
+		return ""
+	}
+	
+	bar := strings.Repeat(char, count)
+	if color != "" {
+		return fmt.Sprintf("[%s]%s[-]", color, bar)
+	}
+	return bar
 }

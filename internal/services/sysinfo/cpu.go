@@ -10,6 +10,16 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 )
 
+func getCPUBar(usage float64, barColor string, d *utils.Dashboard, w int) string {
+	barWidth := w / 3
+	usedWidth := int((usage / 100) * float64(barWidth))
+
+	usedBar := strings.Repeat(utils.BAR, usedWidth)
+	emptyBar := strings.Repeat("░", barWidth-usedWidth)
+
+	return fmt.Sprintf("[%s]%s[-][%s]%s[-]", barColor, usedBar, utils.GetColorFromName(d.Theme.Foreground), emptyBar)
+}
+
 func GetCpuInfo() []cpu.InfoStat {
 	info, err := cpu.Info()
 	if err != nil {
@@ -140,7 +150,7 @@ func UpdateCPU(d *utils.Dashboard) {
 			color = d.Theme.CPU.BarHigh
 		}
 
-		totalText := fmt.Sprintf("Total: %s %.0f%%", utils.BarColor(utils.BAR, w/3, color), totalUsage)
+		totalText := fmt.Sprintf("Total: %s %.0f%%", getCPUBar(totalUsage, color, d, w), totalUsage)
 		tview.Print(screen, totalText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.CPU.ForegroundColor))
 
 		currentY := y + 2
@@ -156,7 +166,8 @@ func UpdateCPU(d *utils.Dashboard) {
 			if p > 80 {
 				color = d.Theme.CPU.BarHigh
 			}
-			coreText := fmt.Sprintf("Core %d: %s %.0f%%", i, utils.BarColor(utils.BAR, w/3, color), p)
+			cpuBar := getCPUBar(p, color, d, w)
+			coreText := fmt.Sprintf("Core %d: %s %.0f%%", i, cpuBar, p)
 
 			col := i % maxCols
 			row := i / maxCols

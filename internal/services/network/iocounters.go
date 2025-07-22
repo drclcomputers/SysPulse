@@ -2,6 +2,7 @@ package network
 
 import (
 	"fmt"
+	"strings"
 	"syspulse/internal/utils"
 	"time"
 
@@ -16,6 +17,25 @@ var (
 	bytesSentPerSec float64
 	bytesRecvPerSec float64
 )
+
+func getNetworkBar(bytesPerSec float64, barColor string, d *utils.Dashboard, w int) string {
+	maxSpeed := 100.0 * 1024 * 1024
+	percentage := (bytesPerSec / maxSpeed) * 100
+	if percentage > 100 {
+		percentage = 100
+	}
+
+	barWidth := w / 3
+	if barWidth < 10 {
+		barWidth = 10
+	}
+	usedWidth := int((percentage / 100) * float64(barWidth))
+
+	usedBar := strings.Repeat(utils.BAR, usedWidth)
+	emptyBar := strings.Repeat("░", barWidth-usedWidth)
+
+	return fmt.Sprintf("[%s]%s[-][%s]%s[-]", barColor, usedBar, utils.GetColorFromName(d.Theme.Foreground), emptyBar)
+}
 
 func formatBytes(bytes float64) string {
 	const (
@@ -59,21 +79,23 @@ func UpdateNetwork(d *utils.Dashboard) {
 			lastBytesRecv = d.NetData.BytesRecv
 			lastMeasurement = now
 
-			sentBarCount := utils.Between(int(bytesSentPerSec/1024/10), 0, 10)
-			recvBarCount := utils.Between(int(bytesRecvPerSec/1024/10), 0, 10)
-
-			color := d.Theme.Network.BarLow
-			if sentBarCount > 8 {
-				color = d.Theme.Network.BarHigh
+			uploadColor := d.Theme.Network.BarLow
+			if bytesSentPerSec > 10*1024*1024 {
+				uploadColor = d.Theme.Network.BarHigh
 			}
-			uploadText := fmt.Sprintf("Upload  : %s %s", utils.BarColor(utils.BAR, sentBarCount, color), formatBytes(bytesSentPerSec))
+
+			downloadColor := d.Theme.Network.BarLow
+			if bytesRecvPerSec > 10*1024*1024 {
+				downloadColor = d.Theme.Network.BarHigh
+			}
+
+			uploadBar := getNetworkBar(bytesSentPerSec, uploadColor, d, w)
+			downloadBar := getNetworkBar(bytesRecvPerSec, downloadColor, d, w)
+
+			uploadText := fmt.Sprintf("Upload  : %s %s", uploadBar, formatBytes(bytesSentPerSec))
 			currentY := utils.SafePrintText(screen, uploadText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.Network.ForegroundColor))
 
-			color = d.Theme.Network.BarLow
-			if recvBarCount > 8 {
-				color = d.Theme.Network.BarHigh
-			}
-			downloadText := fmt.Sprintf("Download: %s %s", utils.BarColor(utils.BAR, recvBarCount, color), formatBytes(bytesRecvPerSec))
+			downloadText := fmt.Sprintf("Download: %s %s", downloadBar, formatBytes(bytesRecvPerSec))
 			currentY = utils.SafePrintText(screen, downloadText, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Network.ForegroundColor))
 
 			for _, iface := range GetInterfaces() {
