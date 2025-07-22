@@ -50,21 +50,14 @@ func (d *Dashboard) initHeaderWidget() {
 			d.quitModal()
 			return nil
 		case 'i', 'I', rune(tcell.KeyEnter):
-			sysInfoView := tview.NewTextView().
+			modal := tview.NewModal().
 				SetText(sysinfo.GetSystemInfo()).
-				SetScrollable(true).
-				SetWrap(true)
-			utils.SetBorderStyle(sysInfoView.Box)
-			sysInfoView.SetTitle("System Overview (Arrow keys to scroll, ESC to close)").
-				SetTitleAlign(tview.AlignCenter)
-			sysInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-				if event.Key() == tcell.KeyEscape {
+				AddButtons([]string{"Close"}).
+				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 					d.App.SetRoot(d.MainWidget, true).SetFocus(d.HeaderWidget)
-					return nil
-				}
-				return event
-			})
-			d.App.SetRoot(sysInfoView, true).SetFocus(sysInfoView)
+				})
+			modal.SetTitle("System Overview")
+			d.App.SetRoot(modal, true).SetFocus(modal)
 		}
 		return nil
 	})
