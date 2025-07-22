@@ -26,9 +26,9 @@ func getDiskBar(used, total float64, theme utils.DISKModel, w int) string {
 	}
 
 	usedBar := strings.Repeat(utils.BAR, usedWidth)
-	emptyBar := strings.Repeat(utils.BAR, barWidth-usedWidth)
+	emptyBar := strings.Repeat("░", barWidth-usedWidth)
 
-	return fmt.Sprintf("[%s]%s[-][%s]%s[-]", barColor, usedBar, theme.BarEmpty, emptyBar)
+	return fmt.Sprintf("[%s]%s[-]%s", barColor, usedBar, emptyBar)
 }
 
 func UpdateDisk(d *utils.Dashboard) {

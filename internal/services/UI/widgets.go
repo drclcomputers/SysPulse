@@ -138,8 +138,9 @@ func (d *Dashboard) initMemoryWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					memorymodal := tview.NewModal().
-						SetText(memory.GetMemoryFormattedInfo()).
+					memorymodal := tview.NewModal()
+					memorymodal.SetTitle("Memory Usage Information")
+					memorymodal.SetText(memory.GetMemoryFormattedInfo()).
 						AddButtons([]string{"Ok"}).
 						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 							if buttonLabel == "Ok" {
@@ -236,15 +237,43 @@ func (d *Dashboard) initNetworkWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					networkmodal := tview.NewModal().
-						SetText(network.GetNetworkFormattedInfo()).
-						AddButtons([]string{"Ok"}).
-						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-							if buttonLabel == "Ok" {
-								d.App.SetRoot(d.MainWidget, true).SetFocus(d.NetWidget)
-							}
-						})
-					d.App.SetRoot(networkmodal, false).SetFocus(networkmodal)
+					textView := tview.NewTextView().
+						SetDynamicColors(true).
+						SetRegions(true).
+						SetWordWrap(true).
+						SetScrollable(true).
+						SetText(network.GetNetworkFormattedInfo())
+
+					utils.SetBorderStyle(textView.Box)
+					textView.SetTitle("Network Activity & Interfaces (Arrow keys to scroll, ESC to close)").
+						SetTitleAlign(tview.AlignCenter)
+
+					textView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+						switch event.Key() {
+						case tcell.KeyEscape:
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.NetWidget)
+							return nil
+						}
+
+						switch event.Rune() {
+						case 'q', 'Q':
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.NetWidget)
+							return nil
+						}
+
+						return event
+					})
+
+					flex := tview.NewFlex().
+						AddItem(nil, 0, 1, false).
+						AddItem(tview.NewFlex().
+							SetDirection(tview.FlexRow).
+							AddItem(nil, 0, 1, false).
+							AddItem(textView, 0, 10, true).
+							AddItem(nil, 0, 1, false), 0, 10, true).
+						AddItem(nil, 0, 1, false)
+
+					d.App.SetRoot(flex, true).SetFocus(textView)
 				}
 				return nil
 			})
@@ -270,8 +299,9 @@ func (d *Dashboard) initGPUWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					gpumodal := tview.NewModal().
-						SetText(gpu.GetGPUFormattedInfo()).
+					gpumodal := tview.NewModal()
+					gpumodal.SetTitle("GPU Information")
+					gpumodal.SetText(gpu.GetGPUFormattedInfo()).
 						AddButtons([]string{"Ok"}).
 						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 							if buttonLabel == "Ok" {

@@ -120,7 +120,7 @@ func GetNetworkFormattedInfo() string {
 		return fmt.Sprintf("Network: Error - %v", err)
 	}
 
-	info := "Network Activity Information\n\n"
+	var info string
 
 	if len(stats) > 0 {
 		netStat := stats[0]

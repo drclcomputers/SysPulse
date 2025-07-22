@@ -86,7 +86,7 @@ func GetCpuFormattedInfo() string {
 		output += fmt.Sprintf("Total Features: %d\n", len(cpu.Flags))
 	}
 
-	output += fmt.Sprintf("--- Average CPU Usage: %.1f%%\n", totalUsage)
+	output += fmt.Sprintf("\n--- Average CPU Usage: %.1f%%\n", totalUsage)
 
 	return output
 }

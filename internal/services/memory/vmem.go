@@ -82,7 +82,7 @@ func GetMemoryFormattedInfo() string {
 		return fmt.Sprintf("Memory: Error getting swap - %v", err)
 	}
 
-	info := "Memory Usage Information\n\n"
+	var info string
 
 	info += "=== RAM (Virtual Memory) ===\n"
 	info += fmt.Sprintf("Total: %.2f GB\n", float64(vm.Total)/1024/1024/1024)
