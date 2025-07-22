@@ -200,7 +200,9 @@ Resource Usage:
 • Threads: %d
 
 Command:
-%s`,
+%s
+
+[yellow]Navigation: ↑/↓ to scroll, Esc to close[white]`,
 		name, selectedPID, status, username,
 		time.Unix(createTime/1000, 0).Format("2006-01-02 15:04:05"),
 		cpu, mem,
@@ -209,15 +211,25 @@ Command:
 		numThreads,
 		cmdline)
 
-	modal := tview.NewModal().
+	modal := tview.NewTextView().
 		SetText(details).
-		SetBackgroundColor(tcell.ColorBlack).
-		SetTextColor(tcell.ColorWhite).
-		SetButtonBackgroundColor(tcell.ColorBlue).
-		AddButtons([]string{"Close"}).
-		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+		SetScrollable(true).
+		SetWrap(true).
+		SetDynamicColors(true).
+		SetWordWrap(true)
+
+	utils.SetBorderStyle(modal.Box)
+	modal.SetTitle("Process Details (Arrow keys to scroll, ESC to close)").
+		SetTitleAlign(tview.AlignCenter)
+
+	modal.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case tcell.KeyEscape:
 			d.App.SetRoot(d.MainWidget, true).SetFocus(d.ProcessWidget)
-		})
+			return nil
+		}
+		return event
+	})
 
 	flex := tview.NewFlex().
 		AddItem(nil, 0, 1, false).
