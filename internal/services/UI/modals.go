@@ -15,25 +15,25 @@ func (d *Dashboard) showHelpModal() {
 	d.InModalState = true
 
 	helpText := `Global Shortcuts:
-- TAB/Shift+TAB - Cycle through widgets
-- Q - Quit application
-- H - Show this help screen
-- I or ENTER - Show detailed information modal for focused widget
+• TAB/Shift+TAB or Right/Left - Cycle through widgets
+• Q - Quit application
+• H - Show this help screen
+• I or ENTER - Show detailed information modal for focused widget
 
 Quick Navigation:
-- C - Focus CPU widget
-- M - Focus Memory widget
-- D - Focus Disk widget
-- N - Focus Network widget
-- P - Focus Process widget
-- G - Focus GPU widget
+• C - Focus CPU widget
+• M - Focus Memory widget
+• D - Focus Disk widget
+• N - Focus Network widget
+• P - Focus Process widget
+• G - Focus GPU widget
 
 Process Management:
-- K - Kill selected process
-- F - Search/filter processes
-- Up/Down or W/S - Navigate process list
-- I - View selected process details
-- Y - Change process sorting (CPU/Memory)`
+• K - Kill selected process
+• F - Search/filter processes
+• Up/Down or W/S - Navigate process list
+• I - View selected process details
+• Y - Change process sorting (CPU/Memory)`
 
 	modal := tview.NewModal().
 		SetText(helpText).
