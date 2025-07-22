@@ -174,16 +174,3 @@ func GetBorderChar() string {
 	}
 	return "│"
 }
-
-// BarColor creates a colored bar with the specified character, count, and color
-func BarColor(char string, count int, color string) string {
-	if count <= 0 {
-		return ""
-	}
-	
-	bar := strings.Repeat(char, count)
-	if color != "" {
-		return fmt.Sprintf("[%s]%s[-]", color, bar)
-	}
-	return bar
-}
