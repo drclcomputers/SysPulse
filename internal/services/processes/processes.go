@@ -200,9 +200,7 @@ Resource Usage:
 • Threads: %d
 
 Command:
-%s
-
-[yellow]Navigation: ↑/↓ to scroll, Esc to close[white]`,
+%s`,
 		name, selectedPID, status, username,
 		time.Unix(createTime/1000, 0).Format("2006-01-02 15:04:05"),
 		cpu, mem,
@@ -236,8 +234,8 @@ Command:
 		AddItem(tview.NewFlex().
 			SetDirection(tview.FlexRow).
 			AddItem(nil, 0, 1, false).
-			AddItem(modal, 0, 1, true).
-			AddItem(nil, 0, 1, false), 0, 1, true).
+			AddItem(modal, 0, 3, true).
+			AddItem(nil, 0, 1, false), 0, 3, true).
 		AddItem(nil, 0, 1, false)
 
 	d.App.SetRoot(flex, true).SetFocus(modal)
