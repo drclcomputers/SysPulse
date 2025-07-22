@@ -202,8 +202,8 @@ func (d *Dashboard) initDiskWidget() {
 						AddItem(tview.NewFlex().
 							SetDirection(tview.FlexRow).
 							AddItem(nil, 0, 1, false).
-							AddItem(textView, 0, 10, true).
-							AddItem(nil, 0, 1, false), 0, 10, true).
+							AddItem(textView, 0, 5, true).
+							AddItem(nil, 0, 1, false), 0, 5, true).
 						AddItem(nil, 0, 1, false)
 
 					d.App.SetRoot(flex, true).SetFocus(textView)
@@ -264,8 +264,8 @@ func (d *Dashboard) initNetworkWidget() {
 						AddItem(tview.NewFlex().
 							SetDirection(tview.FlexRow).
 							AddItem(nil, 0, 1, false).
-							AddItem(textView, 0, 10, true).
-							AddItem(nil, 0, 1, false), 0, 10, true).
+							AddItem(textView, 0, 6, true).
+							AddItem(nil, 0, 1, false), 0, 6, true).
 						AddItem(nil, 0, 1, false)
 
 					d.App.SetRoot(flex, true).SetFocus(textView)
@@ -314,8 +314,8 @@ func (d *Dashboard) initGPUWidget() {
 						AddItem(tview.NewFlex().
 							SetDirection(tview.FlexRow).
 							AddItem(nil, 0, 1, false).
-							AddItem(gpuInfoView, 0, 5, true).
-							AddItem(nil, 0, 1, false), 0, 5, true).
+							AddItem(gpuInfoView, 0, 3, true).
+							AddItem(nil, 0, 1, false), 0, 3, true).
 						AddItem(nil, 0, 1, false)
 
 					d.App.SetRoot(flex, true).SetFocus(gpuInfoView)
@@ -472,8 +472,8 @@ func (d *Dashboard) initTemperatureWidget() {
 				AddItem(tview.NewFlex().
 					SetDirection(tview.FlexRow).
 					AddItem(nil, 0, 1, false).
-					AddItem(tempInfoView, 0, 5, true).
-					AddItem(nil, 0, 1, false), 0, 5, true).
+					AddItem(tempInfoView, 0, 3, true).
+					AddItem(nil, 0, 1, false), 0, 3, true).
 				AddItem(nil, 0, 1, false)
 
 			d.App.SetRoot(flex, true).SetFocus(tempInfoView)
@@ -553,8 +553,8 @@ func (d *Dashboard) initDiskIOWidget() {
 				AddItem(tview.NewFlex().
 					SetDirection(tview.FlexRow).
 					AddItem(nil, 0, 1, false).
-					AddItem(textView, 0, 10, true).
-					AddItem(nil, 0, 1, false), 0, 10, true).
+					AddItem(textView, 0, 7, true).
+					AddItem(nil, 0, 1, false), 0, 7, true).
 				AddItem(nil, 0, 1, false)
 
 			d.App.SetRoot(flex, true).SetFocus(textView)
