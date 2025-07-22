@@ -173,13 +173,13 @@ func formatBytes(bytes float64) string {
 	)
 
 	if bytes >= GB {
-		return fmt.Sprintf("%.0f GB", bytes/GB)
+		return fmt.Sprintf("%.0fGB", bytes/GB)
 	} else if bytes >= MB {
-		return fmt.Sprintf("%.0f MB", bytes/MB)
+		return fmt.Sprintf("%.0fMB", bytes/MB)
 	} else if bytes >= KB {
-		return fmt.Sprintf("%.0f KB", bytes/KB)
+		return fmt.Sprintf("%.0fKB", bytes/KB)
 	}
-	return fmt.Sprintf("%.0f B", bytes)
+	return fmt.Sprintf("%.0fB", bytes)
 }
 
 func formatNumber(num float64) string {

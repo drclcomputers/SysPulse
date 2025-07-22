@@ -47,13 +47,13 @@ func formatBytes(bytes float64) string {
 
 	switch {
 	case bytes >= GB:
-		return fmt.Sprintf("%.0f GB/s", bytes/GB)
+		return fmt.Sprintf("%.0fGB/s", bytes/GB)
 	case bytes >= MB:
-		return fmt.Sprintf("%.0f MB/s", bytes/MB)
+		return fmt.Sprintf("%.0fMB/s", bytes/MB)
 	case bytes >= KB:
-		return fmt.Sprintf("%.0f KB/s", bytes/KB)
+		return fmt.Sprintf("%.0fKB/s", bytes/KB)
 	default:
-		return fmt.Sprintf("%.0f B/s", bytes)
+		return fmt.Sprintf("%.0fB/s", bytes)
 	}
 }
 
