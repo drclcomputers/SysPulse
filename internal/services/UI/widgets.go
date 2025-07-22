@@ -50,15 +50,21 @@ func (d *Dashboard) initHeaderWidget() {
 			d.quitModal()
 			return nil
 		case 'i', 'I', rune(tcell.KeyEnter):
-			infomodal := tview.NewModal().
+			sysInfoView := tview.NewTextView().
 				SetText(sysinfo.GetSystemInfo()).
-				AddButtons([]string{"Ok"}).
-				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-					if buttonLabel == "Ok" {
-						d.App.SetRoot(d.MainWidget, true).SetFocus(d.HeaderWidget)
-					}
-				})
-			d.App.SetRoot(infomodal, false).SetFocus(infomodal)
+				SetScrollable(true).
+				SetWrap(true)
+			utils.SetBorderStyle(sysInfoView.Box)
+			sysInfoView.SetTitle("System Overview (Arrow keys to scroll, ESC to close)").
+				SetTitleAlign(tview.AlignCenter)
+			sysInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+				if event.Key() == tcell.KeyEscape {
+					d.App.SetRoot(d.MainWidget, true).SetFocus(d.HeaderWidget)
+					return nil
+				}
+				return event
+			})
+			d.App.SetRoot(sysInfoView, true).SetFocus(sysInfoView)
 		}
 		return nil
 	})
@@ -138,16 +144,21 @@ func (d *Dashboard) initMemoryWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					memorymodal := tview.NewModal()
-					memorymodal.SetTitle("Memory Usage Information")
-					memorymodal.SetText(memory.GetMemoryFormattedInfo()).
-						AddButtons([]string{"Ok"}).
-						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-							if buttonLabel == "Ok" {
-								d.App.SetRoot(d.MainWidget, true).SetFocus(d.MemWidget)
-							}
-						})
-					d.App.SetRoot(memorymodal, false).SetFocus(memorymodal)
+					memoryInfoView := tview.NewTextView().
+						SetText(memory.GetMemoryFormattedInfo()).
+						SetScrollable(true).
+						SetWrap(true)
+					utils.SetBorderStyle(memoryInfoView.Box)
+					memoryInfoView.SetTitle("Memory Usage Information (Arrow keys to scroll, ESC to close)").
+						SetTitleAlign(tview.AlignCenter)
+					memoryInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+						if event.Key() == tcell.KeyEscape {
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.MemWidget)
+							return nil
+						}
+						return event
+					})
+					d.App.SetRoot(memoryInfoView, true).SetFocus(memoryInfoView)
 				}
 				return nil
 			})
@@ -173,7 +184,6 @@ func (d *Dashboard) initDiskWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					// Create scrollable disk info modal
 					textView := tview.NewTextView().
 						SetDynamicColors(true).
 						SetRegions(true).
@@ -201,7 +211,6 @@ func (d *Dashboard) initDiskWidget() {
 						return event
 					})
 
-					// Create flex layout for centered modal
 					flex := tview.NewFlex().
 						AddItem(nil, 0, 1, false).
 						AddItem(tview.NewFlex().
@@ -299,16 +308,21 @@ func (d *Dashboard) initGPUWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					gpumodal := tview.NewModal()
-					gpumodal.SetTitle("GPU Information")
-					gpumodal.SetText(gpu.GetGPUFormattedInfo()).
-						AddButtons([]string{"Ok"}).
-						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-							if buttonLabel == "Ok" {
-								d.App.SetRoot(d.MainWidget, true).SetFocus(d.GPUWidget)
-							}
-						})
-					d.App.SetRoot(gpumodal, false).SetFocus(gpumodal)
+					gpuInfoView := tview.NewTextView().
+						SetText(gpu.GetGPUFormattedInfo()).
+						SetScrollable(true).
+						SetWrap(true)
+					utils.SetBorderStyle(gpuInfoView.Box)
+					gpuInfoView.SetTitle("GPU Information (Arrow keys to scroll, ESC to close)").
+						SetTitleAlign(tview.AlignCenter)
+					gpuInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+						if event.Key() == tcell.KeyEscape {
+							d.App.SetRoot(d.MainWidget, true).SetFocus(d.GPUWidget)
+							return nil
+						}
+						return event
+					})
+					d.App.SetRoot(gpuInfoView, true).SetFocus(gpuInfoView)
 				}
 				return nil
 			})
@@ -413,16 +427,21 @@ func (d *Dashboard) initLoadWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			infomodal := tview.NewModal()
-			infomodal.SetTitle("System Load Average")
-			infomodal.SetText(load.GetLoadFormattedInfo()).
-				AddButtons([]string{"Ok"}).
-				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-					if buttonLabel == "Ok" {
-						d.App.SetRoot(d.MainWidget, true).SetFocus(d.LoadWidget)
-					}
-				})
-			d.App.SetRoot(infomodal, false).SetFocus(infomodal)
+			loadInfoView := tview.NewTextView().
+				SetText(load.GetLoadFormattedInfo()).
+				SetScrollable(true).
+				SetWrap(true)
+			utils.SetBorderStyle(loadInfoView.Box)
+			loadInfoView.SetTitle("System Load Average (Arrow keys to scroll, ESC to close)").
+				SetTitleAlign(tview.AlignCenter)
+			loadInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+				if event.Key() == tcell.KeyEscape {
+					d.App.SetRoot(d.MainWidget, true).SetFocus(d.LoadWidget)
+					return nil
+				}
+				return event
+			})
+			d.App.SetRoot(loadInfoView, true).SetFocus(loadInfoView)
 		}
 		return nil
 	})
@@ -444,16 +463,21 @@ func (d *Dashboard) initTemperatureWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			infomodal := tview.NewModal()
-			infomodal.SetTitle("System Temperature Monitoring")
-			infomodal.SetText(temperature.GetTemperatureFormattedInfo()).
-				AddButtons([]string{"Ok"}).
-				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-					if buttonLabel == "Ok" {
-						d.App.SetRoot(d.MainWidget, true).SetFocus(d.TemperatureWidget)
-					}
-				})
-			d.App.SetRoot(infomodal, false).SetFocus(infomodal)
+			tempInfoView := tview.NewTextView().
+				SetText(temperature.GetTemperatureFormattedInfo()).
+				SetScrollable(true).
+				SetWrap(true)
+			utils.SetBorderStyle(tempInfoView.Box)
+			tempInfoView.SetTitle("System Temperature Monitoring (Arrow keys to scroll, ESC to close)").
+				SetTitleAlign(tview.AlignCenter)
+			tempInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+				if event.Key() == tcell.KeyEscape {
+					d.App.SetRoot(d.MainWidget, true).SetFocus(d.TemperatureWidget)
+					return nil
+				}
+				return event
+			})
+			d.App.SetRoot(tempInfoView, true).SetFocus(tempInfoView)
 		}
 		return nil
 	})
@@ -578,16 +602,21 @@ func (d *Dashboard) initBatteryWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			infomodal := tview.NewModal()
-			infomodal.SetTitle("Battery Information")
-			infomodal.SetText(battery.GetBatteryFormattedInfo()).
-				AddButtons([]string{"Ok"}).
-				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-					if buttonLabel == "Ok" {
-						d.App.SetRoot(d.MainWidget, true).SetFocus(d.BatteryWidget)
-					}
-				})
-			d.App.SetRoot(infomodal, false).SetFocus(infomodal)
+			batteryInfoView := tview.NewTextView().
+				SetText(battery.GetBatteryFormattedInfo()).
+				SetScrollable(true).
+				SetWrap(true)
+			utils.SetBorderStyle(batteryInfoView.Box)
+			batteryInfoView.SetTitle("Battery Information (Arrow keys to scroll, ESC to close)").
+				SetTitleAlign(tview.AlignCenter)
+			batteryInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+				if event.Key() == tcell.KeyEscape {
+					d.App.SetRoot(d.MainWidget, true).SetFocus(d.BatteryWidget)
+					return nil
+				}
+				return event
+			})
+			d.App.SetRoot(batteryInfoView, true).SetFocus(batteryInfoView)
 		}
 		return nil
 	})

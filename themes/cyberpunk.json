@@ -152,7 +152,7 @@
 			"border_color": "yellow",
 			"colSpan": 1,
 			"column": 1,
-			"enabled": false,
+			"enabled": true,
 			"foreground_color": "yellow",
 			"minWidth": 30,
 			"row": 3,
