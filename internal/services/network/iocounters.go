@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 	"github.com/shirou/gopsutil/net"
 )
 
@@ -93,10 +94,12 @@ func UpdateNetwork(d *utils.Dashboard) {
 			downloadBar := getNetworkBar(bytesRecvPerSec, downloadColor, d, w)
 
 			uploadText := fmt.Sprintf("Upload  : %s %s", uploadBar, formatBytes(bytesSentPerSec))
-			currentY := utils.SafePrintText(screen, uploadText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.Network.ForegroundColor))
+			tview.Print(screen, uploadText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.Network.ForegroundColor))
+			currentY := y + 2
 
 			downloadText := fmt.Sprintf("Download: %s %s", downloadBar, formatBytes(bytesRecvPerSec))
-			currentY = utils.SafePrintText(screen, downloadText, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Network.ForegroundColor))
+			tview.Print(screen, downloadText, x+2, currentY, w-2, h-(currentY-y), utils.GetColorFromName(d.Theme.Layout.Network.ForegroundColor))
+			currentY++
 
 			for _, iface := range GetInterfaces() {
 				if currentY >= y+h-1 {

@@ -232,8 +232,8 @@ Command:
 		AddItem(tview.NewFlex().
 			SetDirection(tview.FlexRow).
 			AddItem(nil, 0, 1, false).
-			AddItem(modal, 0, 6, true).
-			AddItem(nil, 0, 1, false), 0, 6, true).
+			AddItem(modal, 0, 3, true).
+			AddItem(nil, 0, 1, false), 0, 3, true).
 		AddItem(nil, 0, 1, false)
 
 	d.App.SetRoot(flex, true).SetFocus(modal)

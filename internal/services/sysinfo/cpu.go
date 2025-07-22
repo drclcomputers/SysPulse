@@ -153,13 +153,7 @@ func UpdateCPU(d *utils.Dashboard) {
 		totalText := fmt.Sprintf("Total: %s %.0f%%", getCPUBar(totalUsage, color, d, w), totalUsage)
 		tview.Print(screen, totalText, x+2, y+1, w-2, h-1, utils.GetColorFromName(d.Theme.Layout.CPU.ForegroundColor))
 
-		currentY := y + 2
-
-		colWidth := 26
-		maxCols := (w - 4) / colWidth
-		if maxCols < 1 {
-			maxCols = 1
-		}
+		currentY := y + 3
 
 		for i, p := range d.CpuData {
 			color := d.Theme.CPU.BarLow
@@ -169,15 +163,8 @@ func UpdateCPU(d *utils.Dashboard) {
 			cpuBar := getCPUBar(p, color, d, w)
 			coreText := fmt.Sprintf("Core %d: %s %.0f%%", i, cpuBar, p)
 
-			col := i % maxCols
-			row := i / maxCols
-
-			xPos := x + 2 + (col * colWidth)
-			yPos := currentY + 1 + row
-
-			if yPos < h {
-				tview.Print(screen, coreText, xPos, yPos, colWidth-2, h-yPos+2, utils.GetColorFromName(d.Theme.Layout.CPU.ForegroundColor))
-			}
+			tview.Print(screen, coreText, x+2, currentY, w-2, h, utils.GetColorFromName(d.Theme.Layout.CPU.ForegroundColor))
+			currentY++
 		}
 		return x, y, w, h
 	})
