@@ -137,21 +137,14 @@ func (d *Dashboard) initMemoryWidget() {
 					d.quitModal()
 					return nil
 				case 'i', 'I', rune(tcell.KeyEnter):
-					memoryInfoView := tview.NewTextView().
+					modal := tview.NewModal().
 						SetText(memory.GetMemoryFormattedInfo()).
-						SetScrollable(true).
-						SetWrap(true)
-					utils.SetBorderStyle(memoryInfoView.Box)
-					memoryInfoView.SetTitle("Memory Usage Information (Arrow keys to scroll, ESC to close)").
-						SetTitleAlign(tview.AlignCenter)
-					memoryInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-						if event.Key() == tcell.KeyEscape {
+						AddButtons([]string{"Close"}).
+						SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 							d.App.SetRoot(d.MainWidget, true).SetFocus(d.MemWidget)
-							return nil
-						}
-						return event
-					})
-					d.App.SetRoot(memoryInfoView, true).SetFocus(memoryInfoView)
+						})
+					modal.SetTitle("Memory Usage Information")
+					d.App.SetRoot(modal, true).SetFocus(modal)
 				}
 				return nil
 			})
@@ -315,7 +308,17 @@ func (d *Dashboard) initGPUWidget() {
 						}
 						return event
 					})
-					d.App.SetRoot(gpuInfoView, true).SetFocus(gpuInfoView)
+
+					flex := tview.NewFlex().
+						AddItem(nil, 0, 1, false).
+						AddItem(tview.NewFlex().
+							SetDirection(tview.FlexRow).
+							AddItem(nil, 0, 1, false).
+							AddItem(gpuInfoView, 0, 5, true).
+							AddItem(nil, 0, 1, false), 0, 5, true).
+						AddItem(nil, 0, 1, false)
+
+					d.App.SetRoot(flex, true).SetFocus(gpuInfoView)
 				}
 				return nil
 			})
@@ -420,21 +423,14 @@ func (d *Dashboard) initLoadWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			loadInfoView := tview.NewTextView().
+			modal := tview.NewModal().
 				SetText(load.GetLoadFormattedInfo()).
-				SetScrollable(true).
-				SetWrap(true)
-			utils.SetBorderStyle(loadInfoView.Box)
-			loadInfoView.SetTitle("System Load Average (Arrow keys to scroll, ESC to close)").
-				SetTitleAlign(tview.AlignCenter)
-			loadInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-				if event.Key() == tcell.KeyEscape {
+				AddButtons([]string{"Close"}).
+				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 					d.App.SetRoot(d.MainWidget, true).SetFocus(d.LoadWidget)
-					return nil
-				}
-				return event
-			})
-			d.App.SetRoot(loadInfoView, true).SetFocus(loadInfoView)
+				})
+			modal.SetTitle("System Load Average")
+			d.App.SetRoot(modal, true).SetFocus(modal)
 		}
 		return nil
 	})
@@ -470,7 +466,17 @@ func (d *Dashboard) initTemperatureWidget() {
 				}
 				return event
 			})
-			d.App.SetRoot(tempInfoView, true).SetFocus(tempInfoView)
+
+			flex := tview.NewFlex().
+				AddItem(nil, 0, 1, false).
+				AddItem(tview.NewFlex().
+					SetDirection(tview.FlexRow).
+					AddItem(nil, 0, 1, false).
+					AddItem(tempInfoView, 0, 5, true).
+					AddItem(nil, 0, 1, false), 0, 5, true).
+				AddItem(nil, 0, 1, false)
+
+			d.App.SetRoot(flex, true).SetFocus(tempInfoView)
 		}
 		return nil
 	})
@@ -595,21 +601,14 @@ func (d *Dashboard) initBatteryWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			batteryInfoView := tview.NewTextView().
+			modal := tview.NewModal().
 				SetText(battery.GetBatteryFormattedInfo()).
-				SetScrollable(true).
-				SetWrap(true)
-			utils.SetBorderStyle(batteryInfoView.Box)
-			batteryInfoView.SetTitle("Battery Information (Arrow keys to scroll, ESC to close)").
-				SetTitleAlign(tview.AlignCenter)
-			batteryInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-				if event.Key() == tcell.KeyEscape {
+				AddButtons([]string{"Close"}).
+				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 					d.App.SetRoot(d.MainWidget, true).SetFocus(d.BatteryWidget)
-					return nil
-				}
-				return event
-			})
-			d.App.SetRoot(batteryInfoView, true).SetFocus(batteryInfoView)
+				})
+			modal.SetTitle("Battery Information")
+			d.App.SetRoot(modal, true).SetFocus(modal)
 		}
 		return nil
 	})
