@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 	"github.com/shirou/gopsutil/disk"
 )
 
@@ -135,14 +136,16 @@ func UpdateDiskIO(d *utils.Dashboard) {
 			writeColor := getIOColor(device.Stats.WriteBytesPerSec)
 
 			readLine := fmt.Sprintf("  R: [%s]%s/s[-] (%s ops/s)", readColor, readRate, formatNumber(device.Stats.ReadOpsPerSec))
-			currentY = utils.SafePrintText(screen, readLine, x+3, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.DiskIO.ForegroundColor))
+			tview.Print(screen, readLine, x+3, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.DiskIO.ForegroundColor))
+			currentY++
 
 			if currentY >= y+h-1 {
 				break
 			}
 
 			writeLine := fmt.Sprintf("  W: [%s]%s/s[-] (%s ops/s)", writeColor, writeRate, formatNumber(device.Stats.WriteOpsPerSec))
-			currentY = utils.SafePrintText(screen, writeLine, x+3, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.DiskIO.ForegroundColor))
+			tview.Print(screen, writeLine, x+3, currentY, w-6, y+h-1, utils.GetColorFromName(d.Theme.Layout.DiskIO.ForegroundColor))
+			currentY++
 
 			if currentY >= y+h-1 {
 				break
@@ -170,11 +173,11 @@ func formatBytes(bytes float64) string {
 	)
 
 	if bytes >= GB {
-		return fmt.Sprintf("%.2f GB", bytes/GB)
+		return fmt.Sprintf("%.0f GB", bytes/GB)
 	} else if bytes >= MB {
-		return fmt.Sprintf("%.2f MB", bytes/MB)
+		return fmt.Sprintf("%.0f MB", bytes/MB)
 	} else if bytes >= KB {
-		return fmt.Sprintf("%.2f KB", bytes/KB)
+		return fmt.Sprintf("%.0f KB", bytes/KB)
 	}
 	return fmt.Sprintf("%.0f B", bytes)
 }
