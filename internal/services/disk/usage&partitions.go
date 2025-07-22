@@ -102,7 +102,7 @@ func GetDiskFormattedInfo() string {
 		return fmt.Sprintf("Disk: Error - %v", err)
 	}
 
-	info := "Disk Usage Information\n\n"
+	var info string
 
 	totalUsed := uint64(0)
 	totalSize := uint64(0)

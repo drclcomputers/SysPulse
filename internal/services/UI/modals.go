@@ -333,7 +333,8 @@ func (d *Dashboard) showProcessTreeModal() {
 		SetTitle("Process Tree (Arrow keys to scroll, ESC to close)").
 		SetTitleAlign(tview.AlignCenter)
 
-	content := "[yellow]Process Tree Structure[white]\n\n"
+	var content string
+
 	content += fmt.Sprintf("Total Processes: %d\n", tree.TotalCount)
 	content += fmt.Sprintf("Last Update: %s\n\n", tree.LastUpdate.Format("15:04:05"))
 

@@ -234,7 +234,8 @@ func GetBatteryFormattedInfo() string {
 		return "Battery Status: No battery detected\n\nThis system appears to be running on AC power only.\nThis is typical for desktop computers and some workstations."
 	}
 
-	info := "Battery Status\n\n"
+	var info string
+
 	info += fmt.Sprintf("Level: %.1f%%\n", batteryInfo.Level)
 	info += fmt.Sprintf("Status: %s\n", batteryInfo.Status)
 	info += fmt.Sprintf("Power Source: %s\n", batteryInfo.PowerSource)

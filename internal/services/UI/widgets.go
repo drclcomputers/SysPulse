@@ -413,8 +413,9 @@ func (d *Dashboard) initLoadWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			infomodal := tview.NewModal().
-				SetText(load.GetLoadFormattedInfo()).
+			infomodal := tview.NewModal()
+			infomodal.SetTitle("System Load Average")
+			infomodal.SetText(load.GetLoadFormattedInfo()).
 				AddButtons([]string{"Ok"}).
 				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 					if buttonLabel == "Ok" {
@@ -443,8 +444,9 @@ func (d *Dashboard) initTemperatureWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			infomodal := tview.NewModal().
-				SetText(temperature.GetTemperatureFormattedInfo()).
+			infomodal := tview.NewModal()
+			infomodal.SetTitle("System Temperature Monitoring")
+			infomodal.SetText(temperature.GetTemperatureFormattedInfo()).
 				AddButtons([]string{"Ok"}).
 				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 					if buttonLabel == "Ok" {
@@ -576,8 +578,9 @@ func (d *Dashboard) initBatteryWidget() {
 		key := event.Rune()
 		switch key {
 		case 'i', 'I', rune(tcell.KeyEnter):
-			infomodal := tview.NewModal().
-				SetText(battery.GetBatteryFormattedInfo()).
+			infomodal := tview.NewModal()
+			infomodal.SetTitle("Battery Information")
+			infomodal.SetText(battery.GetBatteryFormattedInfo()).
 				AddButtons([]string{"Ok"}).
 				SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 					if buttonLabel == "Ok" {

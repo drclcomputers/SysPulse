@@ -126,10 +126,10 @@ func GetNetworkFormattedInfo() string {
 		netStat := stats[0]
 
 		info += "Overall Network Statistics\n"
-		info += fmt.Sprintf("Bytes Sent/Received: %.2f/%.2f GB\n", float64(netStat.BytesSent)/1024/1024/1024, float64(netStat.BytesRecv)/1024/1024/1024)
-		info += fmt.Sprintf("Packets Sent/Received: %d/%d\n", netStat.PacketsSent, netStat.PacketsRecv)
-		info += fmt.Sprintf("Send/Receive Errors: %d/%d\n", netStat.Errin, netStat.Errout)
-		info += fmt.Sprintf("Dropped Packets In/Out: %d/%d\n", netStat.Dropin, netStat.Dropout)
+		info += fmt.Sprintf("• Bytes Sent/Received: %.2f/%.2f GB\n", float64(netStat.BytesSent)/1024/1024/1024, float64(netStat.BytesRecv)/1024/1024/1024)
+		info += fmt.Sprintf("• Packets Sent/Received: %d/%d\n", netStat.PacketsSent, netStat.PacketsRecv)
+		info += fmt.Sprintf("• Send/Receive Errors: %d/%d\n", netStat.Errin, netStat.Errout)
+		info += fmt.Sprintf("• Dropped Packets In/Out: %d/%d\n", netStat.Dropin, netStat.Dropout)
 		info += "\n"
 	}
 
@@ -148,13 +148,13 @@ func GetNetworkFormattedInfo() string {
 		for _, iface := range interfaceStats {
 			if iface.BytesSent > 0 || iface.BytesRecv > 0 {
 				info += fmt.Sprintf("Interface: %s\n", iface.Name)
-				info += fmt.Sprintf("  Sent: %.2f MB (%d packets)\n", float64(iface.BytesSent)/1024/1024, iface.PacketsSent)
-				info += fmt.Sprintf("  Received: %.2f MB (%d packets)\n", float64(iface.BytesRecv)/1024/1024, iface.PacketsRecv)
+				info += fmt.Sprintf("• Sent: %.2f MB (%d packets)\n", float64(iface.BytesSent)/1024/1024, iface.PacketsSent)
+				info += fmt.Sprintf("• Received: %.2f MB (%d packets)\n", float64(iface.BytesRecv)/1024/1024, iface.PacketsRecv)
 				if iface.Errin > 0 || iface.Errout > 0 {
-					info += fmt.Sprintf("  Errors: %d in, %d out\n", iface.Errin, iface.Errout)
+					info += fmt.Sprintf("• Errors: %d in, %d out\n", iface.Errin, iface.Errout)
 				}
 				if iface.Dropin > 0 || iface.Dropout > 0 {
-					info += fmt.Sprintf("  Drops: %d in, %d out\n", iface.Dropin, iface.Dropout)
+					info += fmt.Sprintf("• Drops: %d in, %d out\n", iface.Dropin, iface.Dropout)
 				}
 				info += "\n"
 			}

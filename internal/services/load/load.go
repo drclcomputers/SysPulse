@@ -122,7 +122,8 @@ func GetLoadFormattedInfo() string {
 
 	cpuCount := runtime.NumCPU()
 
-	info := "System Load Average\n"
+	var info string
+
 	info += fmt.Sprintf("CPU Cores: %d\n\n", cpuCount)
 	info += fmt.Sprintf("1 minute:  %.2f (%.1f%%)\n", loadAvg.Load1, (loadAvg.Load1/float64(cpuCount))*100)
 	info += fmt.Sprintf("5 minutes: %.2f (%.1f%%)\n", loadAvg.Load5, (loadAvg.Load5/float64(cpuCount))*100)

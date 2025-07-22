@@ -210,7 +210,7 @@ func GetTemperatureFormattedInfo() string {
 		return fmt.Sprintf("Temperature monitoring: Error - %v", err)
 	}
 
-	info := "System Temperature Monitoring\n\n"
+	var info string
 
 	if tempData.CPUTemp > 0 {
 		info += fmt.Sprintf("CPU Temperature: %.1f°C\n", tempData.CPUTemp)
