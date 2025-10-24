@@ -29,7 +29,9 @@ func GetUptime() string {
 		return "Unknown"
 	}
 
-	return utils.FormatTime(int64(info.Uptime))
+	uptime := formatDuration(info.Uptime)
+
+	return uptime
 }
 
 func GetPlatform() string {
