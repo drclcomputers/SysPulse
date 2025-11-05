@@ -36,7 +36,7 @@
 			"minWidth": 30,
 			"row": 3,
 			"rowSpan": 1,
-			"update_interval": 10,
+			"update_interval": 15,
 			"weight": 1
 		},
 		"columns": 5,
@@ -49,7 +49,7 @@
 			"minWidth": 30,
 			"row": 0,
 			"rowSpan": 3,
-			"update_interval": 1,
+			"update_interval": 2,
 			"weight": 1
 		},
 		"disk": {
@@ -61,7 +61,7 @@
 			"minWidth": 30,
 			"row": 1,
 			"rowSpan": 1,
-			"update_interval": 3,
+			"update_interval": 10,
 			"weight": 1
 		},
 		"disk_io": {
@@ -85,7 +85,7 @@
 			"minWidth": 30,
 			"row": 0,
 			"rowSpan": 1,
-			"update_interval": 3,
+			"update_interval": 7,
 			"weight": 1
 		},
 		"load": {
@@ -109,7 +109,7 @@
 			"minWidth": 30,
 			"row": 0,
 			"rowSpan": 1,
-			"update_interval": 2,
+			"update_interval": 4,
 			"weight": 1
 		},
 		"network": {
@@ -121,7 +121,7 @@
 			"minWidth": 30,
 			"row": 2,
 			"rowSpan": 1,
-			"update_interval": 1,
+			"update_interval": 3,
 			"weight": 1
 		},
 		"network_connections": {
@@ -133,7 +133,7 @@
 			"minWidth": 30,
 			"row": 0,
 			"rowSpan": 1,
-			"update_interval": 5,
+			"update_interval": 3,
 			"weight": 1
 		},
 		"process": {
@@ -145,7 +145,7 @@
 			"minWidth": 30,
 			"row": 0,
 			"rowSpan": 3,
-			"update_interval": 2,
+			"update_interval": 3,
 			"weight": 1
 		},
 		"process_tree": {
@@ -171,7 +171,7 @@
 			"minWidth": 30,
 			"row": 2,
 			"rowSpan": 1,
-			"update_interval": 5,
+			"update_interval": 10,
 			"weight": 1
 		}
 	},

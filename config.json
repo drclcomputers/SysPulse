@@ -38,7 +38,7 @@
 			"weight": 1.0,
 			"border_color": "blue",
 			"foreground_color": "white",
-			"update_interval": 1
+			"update_interval": 2
 		},
 		"memory": {
 			"enabled": true,
@@ -50,7 +50,7 @@
 			"weight": 1.0,
 			"border_color": "green",
 			"foreground_color": "white",
-			"update_interval": 2
+			"update_interval": 4
 		},
 		"disk": {
 			"enabled": true,
@@ -74,7 +74,7 @@
 			"weight": 1.0,
 			"border_color": "cyan",
 			"foreground_color": "white",
-			"update_interval": 2
+			"update_interval": 3
 		},
 		"process": {
 			"enabled": true,
@@ -98,7 +98,7 @@
 			"weight": 1.0,
 			"border_color": "magenta",
 			"foreground_color": "white",
-			"update_interval": 2
+			"update_interval": 7
 		},
 		"load": {
 			"enabled": false,
@@ -122,7 +122,7 @@
 			"weight": 1.0,
 			"border_color": "orange",
 			"foreground_color": "white",
-			"update_interval": 5
+			"update_interval": 10
 		},
 		"network_connections": {
 			"enabled": false,
@@ -134,7 +134,7 @@
 			"weight": 1.0,
 			"border_color": "purple",
 			"foreground_color": "white",
-			"update_interval": 5
+			"update_interval": 3
 		},
 		"disk_io": {
 			"enabled": false,
@@ -170,7 +170,7 @@
 			"weight": 1.0,
 			"border_color": "pink",
 			"foreground_color": "white",
-			"update_interval": 10
+			"update_interval": 15
 		}
 	},
 	"processsort": "cpu",

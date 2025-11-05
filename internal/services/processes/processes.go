@@ -9,6 +9,7 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
+	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/process"
 )
 
@@ -110,13 +111,23 @@ func UpdateProcesses(d *utils.Dashboard) {
 	var items []string
 	selectedIndex := 0
 
+	// Get total system CPU usage
+	systemPercents, err := cpu.Percent(0, false)
+	systemUsage := 0.0
+	if err == nil && len(systemPercents) > 0 {
+		systemUsage = systemPercents[0]
+	}
+
 	for i, p := range procs {
 		pid := p.Pid
 		name, _ := p.Name()
-		cpu, _ := p.CPUPercent()
+		procCPU, _ := p.CPUPercent()
 		mem, _ := p.MemoryPercent()
 
-		mainText := fmt.Sprintf("%s (PID: %d) - CPU: %.1f%% | MEM: %.1f%%", name, pid, cpu, mem)
+		// Calculate actual CPU usage relative to system total
+		actualCPU := (procCPU * systemUsage) / 100.0
+
+		mainText := fmt.Sprintf("%s-CPU:%.2f%%(of %.1f%% sys) MEM:%.1f%% (PID: %d)", name, actualCPU, systemUsage, mem, pid)
 		items = append(items, mainText)
 
 		if pid == selectedPID {
@@ -175,13 +186,26 @@ func ShowProcessDetails(d *utils.Dashboard) {
 
 	name, _ := proc.Name()
 	cmdline, _ := proc.Cmdline()
-	cpu, _ := proc.CPUPercent()
+	procCPU, _ := proc.CPUPercent()
 	mem, _ := proc.MemoryPercent()
 	status, _ := proc.Status()
 	createTime, _ := proc.CreateTime()
 	numThreads, _ := proc.NumThreads()
 	username, _ := proc.Username()
 	memInfo, _ := proc.MemoryInfo()
+
+	// Get system CPU usage for accurate CPU percentage
+	systemPercents, err := cpu.Percent(0, false)
+	systemUsage := 0.0
+	if err == nil && len(systemPercents) > 0 {
+		systemUsage = systemPercents[0]
+	}
+
+	// Calculate actual CPU usage
+	actualCPU := procCPU
+	if systemUsage > 0 {
+		actualCPU = (procCPU * systemUsage) / 100.0
+	}
 
 	details := fmt.Sprintf(`Basic Information:
 • Name: %s
@@ -201,7 +225,7 @@ Command:
 %s`,
 		name, selectedPID, status, username,
 		time.Unix(createTime/1000, 0).Format("2006-01-02 15:04:05"),
-		cpu, mem,
+		actualCPU, mem,
 		memInfo.RSS/1024/1024,
 		memInfo.VMS/1024/1024,
 		numThreads,
