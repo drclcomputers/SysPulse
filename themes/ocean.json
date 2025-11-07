@@ -26,6 +26,12 @@
 		"bar_high": "red",
 		"bar_low": "blue"
 	},
+	"performance": {
+		"process_cache_ttl": 2,
+		"full_scan_interval": 10,
+		"syscall_batch_size": 100,
+		"process_update_interval": 2
+	},
 	"layout": {
 		"battery": {
 			"border_color": "blue",

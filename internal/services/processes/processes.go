@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"sync"
 	"syspulse/internal/utils"
 	"time"
 
@@ -11,6 +12,13 @@ import (
 	"github.com/rivo/tview"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/process"
+)
+
+var (
+	processCache     = GetProcessCache()
+	processesMu      sync.RWMutex
+	lastFullScan     time.Time
+	fullScanInterval = 10 * time.Second
 )
 
 func applyProcessFilterToItems(items []string, searchTerm, filterType string) []string {
@@ -82,11 +90,20 @@ func UpdateProcesses(d *utils.Dashboard) {
 		return
 	}
 
+	processesMu.Lock()
+	defer processesMu.Unlock()
+
 	var selectedPID int32
 	currentItem := d.ProcessWidget.GetCurrentItem()
 	if currentItem >= 0 && currentItem < d.ProcessWidget.GetItemCount() {
 		text, _ := d.ProcessWidget.GetItemText(currentItem)
 		fmt.Sscanf(text, "%s (PID: %d)", new(string), &selectedPID)
+	}
+
+	doFullScan := time.Since(lastFullScan) >= fullScanInterval
+	if doFullScan {
+		lastFullScan = time.Now()
+		processCache.Clear()
 	}
 
 	procs, err := process.Processes()
@@ -124,7 +141,6 @@ func UpdateProcesses(d *utils.Dashboard) {
 		procCPU, _ := p.CPUPercent()
 		mem, _ := p.MemoryPercent()
 
-		// Calculate actual CPU usage relative to system total
 		actualCPU := (procCPU * systemUsage) / 100.0
 
 		mainText := fmt.Sprintf("%s-CPU:%.2f%%(of %.1f%% sys) MEM:%.1f%% (PID: %d)", name, actualCPU, systemUsage, mem, pid)
@@ -179,29 +195,57 @@ func ShowProcessDetails(d *utils.Dashboard) {
 	var selectedPID int32
 	fmt.Sscanf(text, "%s (PID: %d)", new(string), &selectedPID)
 
-	proc, err := process.NewProcess(selectedPID)
-	if err != nil {
-		return
+	var pinfo *ProcessInfo
+	var exists bool
+
+	if pinfo, exists = processCache.Get(selectedPID); !exists {
+		proc, err := process.NewProcess(selectedPID)
+		if err != nil {
+			return
+		}
+
+		name, _ := proc.Name()
+		cmdline, _ := proc.Cmdline()
+		procCPU, _ := proc.CPUPercent()
+		mem, _ := proc.MemoryPercent()
+		status, _ := proc.Status()
+		createTime, _ := proc.CreateTime()
+		numThreads, _ := proc.NumThreads()
+		username, _ := proc.Username()
+		memInfo, _ := proc.MemoryInfo()
+
+		pinfo = &ProcessInfo{
+			Name:       name,
+			CPU:        procCPU,
+			Memory:     mem,
+			Status:     status,
+			Username:   username,
+			CmdLine:    cmdline,
+			CreateTime: createTime,
+			NumThreads: numThreads,
+			MemoryInfo: memInfo,
+			LastUpdate: time.Now(),
+			TTL:        2 * time.Second,
+		}
+		processCache.Set(selectedPID, pinfo)
 	}
 
-	name, _ := proc.Name()
-	cmdline, _ := proc.Cmdline()
-	procCPU, _ := proc.CPUPercent()
-	mem, _ := proc.MemoryPercent()
-	status, _ := proc.Status()
-	createTime, _ := proc.CreateTime()
-	numThreads, _ := proc.NumThreads()
-	username, _ := proc.Username()
-	memInfo, _ := proc.MemoryInfo()
+	name := pinfo.Name
+	cmdline := pinfo.CmdLine
+	procCPU := pinfo.CPU
+	mem := pinfo.Memory
+	status := pinfo.Status
+	createTime := pinfo.CreateTime
+	numThreads := pinfo.NumThreads
+	username := pinfo.Username
+	memInfo := pinfo.MemoryInfo
 
-	// Get system CPU usage for accurate CPU percentage
 	systemPercents, err := cpu.Percent(0, false)
 	systemUsage := 0.0
 	if err == nil && len(systemPercents) > 0 {
 		systemUsage = systemPercents[0]
 	}
 
-	// Calculate actual CPU usage
 	actualCPU := procCPU
 	if systemUsage > 0 {
 		actualCPU = (procCPU * systemUsage) / 100.0

@@ -138,6 +138,12 @@ SysPulse uses a flexible JSON configuration system. Configuration files are load
   "background": "black",
   "foreground": "white",
   "altforeground": "grey",
+  "performance": {
+		"process_cache_ttl": 2,
+		"full_scan_interval": 10,
+		"syscall_batch_size": 100,
+		"process_update_interval": 2
+	},
   "cpu": {
     "bar_low": "green",
     "bar_high": "red"
@@ -789,7 +795,7 @@ If you find any bugs, open an ISSUE and I'll do my best in fixing them as quickl
 
 ## Changelog
 
-- 11.9 alpha - Added custom update intervals for widgets + Bug Fixes
+- 11.9.x alpha - New features and lots of bugs fixes.
 - 11.7 alpha - Initial Release
 
 ---

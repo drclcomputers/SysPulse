@@ -27,6 +27,22 @@ type DISKModel struct {
 	BarEmpty  string `json:"bar_empty"`
 }
 
+type PerformanceConfig struct {
+	ProcessCacheTTL       int `json:"process_cache_ttl"`
+	FullScanInterval      int `json:"full_scan_interval"`
+	SyscallBatchSize      int `json:"syscall_batch_size"`
+	ProcessUpdateInterval int `json:"process_update_interval"`
+}
+
+var (
+	DefaultPerformanceConfig = PerformanceConfig{
+		ProcessCacheTTL:       2,
+		FullScanInterval:      10,
+		SyscallBatchSize:      100,
+		ProcessUpdateInterval: 2,
+	}
+)
+
 type GPUModel struct {
 	BarLow  string `json:"bar_low"`
 	BarHigh string `json:"bar_high"`
