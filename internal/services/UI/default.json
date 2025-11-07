@@ -24,6 +24,12 @@
 		"bar_low": "green",
 		"bar_high": "red"
 	},
+	"performance": {
+		"process_cache_ttl": 2,
+		"full_scan_interval": 10,
+		"syscall_batch_size": 100,
+		"process_update_interval": 2
+	},
 	"layout": {
 		"rows": 4,
 		"columns": 2,
